@@ -13,11 +13,17 @@ export default function Footer() {
             Phase 1 uses a placeholder email only. Replace it with Muhammad Ilham&apos;s real contact before publishing.
           </p>
         </div>
-        <address className="footer-address not-italic">
-          <a href={`mailto:${person.email}`} className="email-link" aria-label={`Email ${person.name}`}>
-            {person.email} <span aria-hidden="true">↗</span>
-          </a>
-        </address>
+        <div className="footer-contact-row">
+          <address className="footer-address not-italic">
+            <a href={`mailto:${person.email}`} className="email-link" aria-label={`Email ${person.name}`}>
+              {person.email} <span aria-hidden="true">↗</span>
+            </a>
+          </address>
+          <nav className="footer-socials" aria-label="Social links">
+            {portfolioData.socialLinks.map((link) => <a key={link.label} href={link.href}>{link.label} <span aria-hidden="true">↗</span></a>)}
+          </nav>
+        </div>
+        <div className="closing-name" aria-hidden="true">{person.name}</div>
         <div className="footer-bottom">
           <p>Copyright 2026 Muhammad Ilham. Static portfolio draft.</p>
           <p>Made for the web <span aria-hidden="true">✦</span></p>

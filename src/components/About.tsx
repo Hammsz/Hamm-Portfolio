@@ -14,9 +14,15 @@ export default function About() {
           <p className="section-label">About</p>
           <h2 id="about-heading" className="section-title about-title">A practical frontend profile in progress.</h2>
         </div>
-        <div className="about-copy">
-          <p>{person.summary}</p>
-          <p className="about-availability">{person.availability}</p>
+        <div className="about-content">
+          <div className="about-copy">
+            <p>{person.summary}</p>
+            <p className="about-availability">{person.availability}</p>
+            <a className="about-cta" href="#contact">Contact me <span aria-hidden="true">↗</span></a>
+          </div>
+          <div className="portrait-placeholder" aria-label="Neutral portrait placeholder">
+            <span>MI</span>
+          </div>
         </div>
       </div>
     </section>

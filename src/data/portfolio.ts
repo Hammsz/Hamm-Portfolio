@@ -9,6 +9,11 @@
     availability: "Open to internships, freelance work, and collaboration.",
     email: "muhammad.ilham@example.com",
   },
+  socialLinks: [
+    { label: "GitHub", href: "#" },
+    { label: "LinkedIn", href: "#" },
+    { label: "Email", href: "mailto:muhammad.ilham@example.com" },
+  ],
   navigation: [
     { label: "Home", href: "#home" },
     { label: "About", href: "#about" },
@@ -32,6 +37,16 @@
       title: "Frontend Maintenance",
       description:
         "Draft service: improving structure, readability, and consistency in existing frontend codebases.",
+    },
+    {
+      title: "Accessible Interfaces",
+      description:
+        "Draft service: shaping clear interfaces with semantic structure, keyboard support, and readable interaction states.",
+    },
+    {
+      title: "Performance Foundations",
+      description:
+        "Draft service: organizing frontend delivery for quick loading, stable layouts, and maintainable future growth.",
     },
   ],
   projects: [
