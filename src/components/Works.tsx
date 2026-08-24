@@ -18,10 +18,13 @@ export default function Works() {
         <div className="project-list">
           {portfolioData.projects.map((project) => (
             <article key={project.title} className="project-item">
-              <div>
+              <div className="project-copy">
                 <p className="project-type">{project.type}</p>
                 <h3>{project.title}</h3>
                 <p>{project.description}</p>
+              </div>
+              <div className="project-visual" aria-hidden="true">
+                <span>{String(portfolioData.projects.indexOf(project) + 1).padStart(2, "0")}</span>
               </div>
               <ul aria-label={`${project.title} draft stack`} className="project-stack">
                 {project.stack.map((item) => (
