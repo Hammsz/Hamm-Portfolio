@@ -1,19 +1,27 @@
-﻿export const portfolioData = {
+﻿export type SocialLink = {
+  label: string;
+  href: string | null;
+};
+
+export type SkillGroup = {
+  id: string;
+  label: string;
+  summary: string;
+  skills: string[];
+};
+
+export const portfolioData = {
+  brandName: "ILHAM",
+  fullName: "Muhammad Ilham",
   person: {
-    name: "Muhammad Ilham",
     role: "Frontend Developer",
     location: "Indonesia",
-    tagline: "Building clear, responsive, and maintainable web interfaces.",
+    tagline: "Building focused, responsive, and maintainable digital interfaces.",
     summary:
-      "Muhammad Ilham is shaping a portfolio focused on practical web development, clean UI, and thoughtful user experiences. This content is a Phase 1 draft and can be updated as real projects and achievements are finalized.",
-    availability: "Open to internships, freelance work, and collaboration.",
-    email: "muhammad.ilham@example.com",
+      "Muhammad Ilham is preparing a portfolio centered on practical frontend work, clear user flows, and carefully structured interfaces. This copy is Phase 1 draft content and should be replaced with verified personal details before publishing.",
+    availability: "Available for selected internships, freelance builds, and collaboration.",
+    emailLabel: "contact pending",
   },
-  socialLinks: [
-    { label: "GitHub", href: "#" },
-    { label: "LinkedIn", href: "#" },
-    { label: "Email", href: "mailto:muhammad.ilham@example.com" },
-  ],
   navigation: [
     { label: "Home", href: "#home" },
     { label: "About", href: "#about" },
@@ -22,61 +30,93 @@
     { label: "Skills", href: "#skills" },
     { label: "Contact", href: "#contact" },
   ],
+  socialLinks: [
+    { label: "GitHub", href: null },
+    { label: "LinkedIn", href: null },
+    { label: "Email", href: null },
+  ] satisfies SocialLink[],
   services: [
     {
+      number: "01",
       title: "Responsive Websites",
       description:
-        "Draft service: creating static and dynamic pages that adapt cleanly across desktop, tablet, and mobile screens.",
+        "Draft service for building clean pages that hold their shape across desktop, tablet, and mobile screens.",
     },
     {
+      number: "02",
       title: "Interface Implementation",
       description:
-        "Draft service: turning approved layouts into semantic, accessible, and maintainable React components.",
+        "Draft service for turning approved layouts into semantic React components with readable structure.",
     },
     {
+      number: "03",
       title: "Frontend Maintenance",
       description:
-        "Draft service: improving structure, readability, and consistency in existing frontend codebases.",
+        "Draft service for improving consistency, spacing, accessibility, and component organization in existing projects.",
     },
     {
-      title: "Accessible Interfaces",
+      number: "04",
+      title: "Accessible Foundations",
       description:
-        "Draft service: shaping clear interfaces with semantic structure, keyboard support, and readable interaction states.",
+        "Draft service for basic keyboard support, meaningful landmarks, clear labels, and visible focus states.",
     },
     {
-      title: "Performance Foundations",
+      number: "05",
+      title: "Performance Readiness",
       description:
-        "Draft service: organizing frontend delivery for quick loading, stable layouts, and maintainable future growth.",
+        "Draft service for lightweight static sections, stable media areas, and content that can grow safely later.",
     },
   ],
   projects: [
     {
-      title: "Personal Portfolio Draft",
+      title: "Portfolio Case Study Draft",
       type: "Draft project",
       description:
-        "A placeholder project for Muhammad Ilham's future portfolio case study. Replace this with a real project summary before publishing.",
+        "A placeholder for a future personal portfolio case study. Replace this with a real project narrative, screenshots, and measured outcomes.",
+      meta: "Personal site / Phase draft",
+      cta: "Details pending",
       stack: ["Next.js", "TypeScript", "Tailwind CSS"],
     },
     {
-      title: "Dashboard Interface Concept",
+      title: "Dashboard Interface Draft",
       type: "Draft project",
       description:
-        "A draft card for a future dashboard or admin interface project. Metrics, screenshots, and links are intentionally not included yet.",
-      stack: ["React", "UI Design", "Responsive Layout"],
+        "A placeholder for an admin or analytics interface project. No external product, client, or reference identity is represented here.",
+      meta: "Interface concept / Draft",
+      cta: "Case study pending",
+      stack: ["React", "Responsive UI", "Components"],
     },
     {
-      title: "Learning Project Archive",
+      title: "Learning Archive Draft",
       type: "Draft project",
       description:
-        "A placeholder for selected learning projects that show growth, problem solving, and frontend fundamentals.",
+        "A placeholder for selected learning projects that can later show Muhammad Ilham's growth, decisions, and frontend fundamentals.",
+      meta: "Learning work / Draft",
+      cta: "Archive pending",
       stack: ["HTML", "CSS", "JavaScript"],
     },
   ],
-  skills: {
-    frontend: ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js"],
-    styling: ["Tailwind CSS", "Responsive Design", "Accessibility Basics"],
-    tools: ["Git", "GitHub", "VS Code", "Figma Basics"],
-  },
+  skillGroups: [
+    {
+      id: "frontend",
+      label: "Frontend",
+      summary: "Core browser and React skills for building structured user interfaces.",
+      skills: ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js"],
+    },
+    {
+      id: "interface",
+      label: "Interface",
+      summary: "Layout, responsive behavior, and accessibility practices for everyday product screens.",
+      skills: ["Tailwind CSS", "Responsive Design", "Semantic HTML", "Keyboard Focus", "Component Layout"],
+    },
+    {
+      id: "tools",
+      label: "Tools",
+      summary: "Working tools for version control, handoff, documentation, and implementation workflow.",
+      skills: ["Git", "GitHub", "VS Code", "Figma Basics", "Code Review Basics"],
+    },
+  ] satisfies SkillGroup[],
+  statements: ["You focus", "I handle", "It flows"],
 };
 
 export type PortfolioData = typeof portfolioData;

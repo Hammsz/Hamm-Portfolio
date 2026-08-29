@@ -1,35 +1,43 @@
 ﻿import { portfolioData } from "@/data/portfolio";
+import SocialLinks from "@/components/ui/SocialLinks";
 
 export default function Footer() {
-  const { person } = portfolioData;
+  const { brandName, fullName, person, socialLinks } = portfolioData;
 
   return (
-    <footer id="contact" aria-labelledby="contact-heading" className="footer rule section">
-      <div className="site-container">
-        <div>
-          <p className="section-label">Contact</p>
-          <h2 id="contact-heading" className="section-title footer-title">Start with a simple hello.</h2>
-          <p className="footer-copy">
-            Phase 1 uses a placeholder email only. Replace it with Muhammad Ilham&apos;s real contact before publishing.
-          </p>
+    <footer id="contact" className="contact-section" aria-labelledby="contact-heading">
+      <div className="section-shell contact-shell">
+        <div className="contact-grid">
+          <div className="contact-copy">
+            <p className="eyebrow">Contact</p>
+            <h2 id="contact-heading"><span>Say Hello!</span></h2>
+            <p>
+              Static contact structure for {fullName}. Add verified contact details and a real submission flow in a later approved phase.
+            </p>
+            <address>
+              <span>{person.emailLabel}</span>
+              <span>{person.location}</span>
+            </address>
+          </div>
+          <form className="contact-form" aria-label="Static contact form placeholder">
+            <label htmlFor="contact-name">Name</label>
+            <input id="contact-name" name="name" type="text" placeholder="Your name" />
+            <label htmlFor="contact-message">Message</label>
+            <textarea id="contact-message" name="message" rows={5} placeholder="Write a short message" />
+            <button type="button">Submission pending</button>
+          </form>
         </div>
-        <div className="footer-contact-row">
-          <address className="footer-address not-italic">
-            <a href={`mailto:${person.email}`} className="email-link" aria-label={`Email ${person.name}`}>
-              {person.email} <span aria-hidden="true">↗</span>
-            </a>
-          </address>
-          <nav className="footer-socials" aria-label="Social links">
-            {portfolioData.socialLinks.map((link) => <a key={link.label} href={link.href}>{link.label} <span aria-hidden="true">↗</span></a>)}
-          </nav>
+        <nav className="footer-socials" aria-label="Social profile placeholders">
+          <SocialLinks links={socialLinks} />
+        </nav>
+        <div className="closing-name-track" aria-hidden="true">
+          <span>{brandName}</span>
         </div>
-        <div className="closing-name" aria-hidden="true">{person.name}</div>
         <div className="footer-bottom">
-          <p>Copyright 2026 Muhammad Ilham. Static portfolio draft.</p>
-          <p>Made for the web <span aria-hidden="true">✦</span></p>
+          <p>Copyright 2026 {fullName}. Static portfolio draft.</p>
+          <p>No external form, audio, API, or tracking in Phase 1.7.</p>
         </div>
       </div>
     </footer>
   );
 }
-

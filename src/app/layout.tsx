@@ -1,9 +1,10 @@
 ﻿import type { Metadata } from "next";
+import { portfolioData } from "@/data/portfolio";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Muhammad Ilham | Portfolio Draft",
-  description: "Static Phase 1 portfolio foundation for Muhammad Ilham.",
+  title: portfolioData.fullName + " - Portfolio Draft",
+  description: "Static portfolio draft for " + portfolioData.fullName + ".",
 };
 
 export default function RootLayout({

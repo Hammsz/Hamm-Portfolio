@@ -1,25 +1,29 @@
 ﻿import { portfolioData } from "@/data/portfolio";
+import SocialLinks from "@/components/ui/SocialLinks";
 
 export default function Hero() {
-  const { person } = portfolioData;
+  const { brandName, person, socialLinks } = portfolioData;
 
   return (
-    <section id="home" aria-labelledby="home-heading" className="hero section">
-      <div className="site-container hero-inner">
-        <div className="hero-kicker">
-          <span className="section-label">{person.role}</span>
-          <span className="hero-location">Based in {person.location}</span>
+    <section id="home" className="hero-section" aria-labelledby="hero-heading">
+      <div className="hero-shell section-shell">
+        <div className="hero-meta" aria-label="Profile summary">
+          <span>{person.role}</span>
+          <span>{person.location}</span>
         </div>
-        <div className="hero-visual" aria-hidden="true"><span>01</span></div>
-        <h1 id="home-heading" className="display-title hero-title">{person.name}</h1>
-        <div className="hero-bottom">
-          <p className="hero-tagline">{person.tagline}</p>
-          <a className="text-link" href="#about">Explore profile <span aria-hidden="true">↘</span></a>
+        <div className="hero-copy">
+          <p>{person.tagline}</p>
+          <a className="text-button" href="#works">
+            View draft work
+          </a>
         </div>
-        <div className="social-rail" aria-label="Social links">
-          <span className="social-line" aria-hidden="true" />
-          {portfolioData.socialLinks.map((link) => <a key={link.label} href={link.href}>{link.label}</a>)}
-        </div>
+        <h1 id="hero-heading" className="hero-title">
+          {brandName}
+        </h1>
+        <nav className="hero-socials" aria-label="Social profile placeholders">
+          <span className="social-rule" aria-hidden="true" />
+          <SocialLinks links={socialLinks} className="social-links-rail" />
+        </nav>
       </div>
     </section>
   );

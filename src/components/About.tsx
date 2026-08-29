@@ -1,28 +1,27 @@
 ﻿import { portfolioData } from "@/data/portfolio";
 
 export default function About() {
-  const { person } = portfolioData;
+  const { brandName, fullName, person } = portfolioData;
 
   return (
-    <section
-      id="about"
-      aria-labelledby="about-heading"
-      className="section rule about-section"
-    >
-      <div className="site-container about-grid">
-        <div>
-          <p className="section-label">About</p>
-          <h2 id="about-heading" className="section-title about-title">A practical frontend profile in progress.</h2>
+    <section id="about" className="about-section section-band" aria-labelledby="about-heading">
+      <div className="section-shell about-shell">
+        <div className="section-heading centered-heading">
+          <p className="eyebrow">About</p>
+          <h2 id="about-heading">About Me</h2>
         </div>
-        <div className="about-content">
-          <div className="about-copy">
+        <div className="about-layout">
+          <article className="about-copy" aria-label={`${fullName} profile draft`}>
             <p>{person.summary}</p>
-            <p className="about-availability">{person.availability}</p>
-            <a className="about-cta" href="#contact">Contact me <span aria-hidden="true">↗</span></a>
-          </div>
-          <div className="portrait-placeholder" aria-label="Neutral portrait placeholder">
-            <span>MI</span>
-          </div>
+            <p className="about-note">{person.availability}</p>
+            <a className="text-button" href="#contact">
+              Start a conversation
+            </a>
+          </article>
+          <figure className="portrait-frame" aria-label={`${fullName} portrait placeholder`}>
+            <div className="portrait-mark" aria-hidden="true">{brandName}</div>
+            <figcaption>Portrait asset pending</figcaption>
+          </figure>
         </div>
       </div>
     </section>
