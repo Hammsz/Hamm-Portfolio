@@ -8,7 +8,7 @@ export default function Services() {
           <p className="eyebrow">Services</p>
           <h2 id="services-heading">Frontend support for clear first launches.</h2>
         </div>
-        <div className="services-viewport" aria-label="Draft service list">
+        <div className="services-viewport" data-lenis-prevent-horizontal aria-label="Draft service list">
           <div className="services-track">
             {portfolioData.services.map((service) => (
               <article className="service-card" key={service.number}>

@@ -15,7 +15,7 @@ export default function Skills() {
           <h2 id="skills-heading">A practical matrix for the next build phase.</h2>
         </div>
         <div className="skills-board">
-          <div className="skill-tabs" aria-label="Skill categories">
+          <div className="skill-tabs" data-lenis-prevent-horizontal aria-label="Skill categories">
             {portfolioData.skillGroups.map((group) => {
               const isActive = group.id === activeCategory;
               const buttonId = tabPrefix + "-" + group.id + "-button";

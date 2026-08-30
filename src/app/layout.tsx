@@ -1,5 +1,7 @@
 ﻿import type { Metadata, Viewport } from "next";
+import MotionProvider from "@/components/motion/MotionProvider";
 import { portfolioData } from "@/data/portfolio";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,8 +21,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body>{children}</body>
+    <html lang="en">
+      <body>
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   );
 }
