@@ -250,6 +250,25 @@ textarea:focus-visible {
   overflow: clip;
 }
 
+html[data-motion="loading"]:not([data-hero-motion-fallback="visible"])
+  .hero-section
+  [data-hero="meta"],
+html[data-motion="loading"]:not([data-hero-motion-fallback="visible"])
+  .hero-section
+  [data-hero="copy"],
+html[data-motion="loading"]:not([data-hero-motion-fallback="visible"])
+  .hero-section
+  [data-hero="title"],
+html[data-motion="loading"]:not([data-hero-motion-fallback="visible"])
+  .hero-section
+  [data-hero="social-rule"],
+html[data-motion="loading"]:not([data-hero-motion-fallback="visible"])
+  .hero-section
+  .social-links-rail
+  > li {
+  opacity: 0;
+}
+
 .hero-shell {
   position: relative;
   display: grid;

@@ -4,6 +4,23 @@ import { portfolioData } from "@/data/portfolio";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 
+const HERO_MOTION_BOOTSTRAP = `
+  (() => {
+    const root = document.documentElement;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    root.dataset.motion = reduceMotion ? "reduced" : "loading";
+
+    if (reduceMotion) return;
+
+    window.setTimeout(() => {
+      if (root.dataset.motion === "loading") {
+        root.dataset.heroMotionFallback = "visible";
+      }
+    }, 2000);
+  })();
+`;
+
 export const metadata: Metadata = {
   title: portfolioData.fullName + " - Portfolio Draft",
   description: "Static portfolio draft for " + portfolioData.fullName + ".",
@@ -21,7 +38,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: HERO_MOTION_BOOTSTRAP }} />
+      </head>
       <body>
         <MotionProvider>{children}</MotionProvider>
       </body>
