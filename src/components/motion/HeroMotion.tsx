@@ -2,7 +2,7 @@
 
 import { type ReactNode, useEffect, useRef } from "react";
 
-const LOADING_GUARD_TIMEOUT_MS = 2000;
+const LOADING_GUARD_TIMEOUT_MS = 5000;
 
 type HeroMotionProps = {
   children: ReactNode;
@@ -18,6 +18,7 @@ export default function HeroMotion({ children }: HeroMotionProps) {
     const root = document.documentElement;
     let disposed = false;
     let entrancePlayed = root.dataset.heroMotionFallback === "visible";
+    root.dataset.heroMotionMounted = "true";
     let setupPending = false;
     let setupRequested = false;
     let setupVersion = 0;
@@ -253,6 +254,7 @@ export default function HeroMotion({ children }: HeroMotionProps) {
       motionStateObserver.disconnect();
       clearLoadingGuard();
       teardownAnimation();
+      delete root.dataset.heroMotionMounted;
     };
   }, []);
 

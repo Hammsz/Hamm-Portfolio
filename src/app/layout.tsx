@@ -14,7 +14,10 @@ const HERO_MOTION_BOOTSTRAP = `
     if (reduceMotion) return;
 
     window.setTimeout(() => {
-      if (root.dataset.motion === "loading") {
+      if (
+        root.dataset.motion === "loading" &&
+        root.dataset.heroMotionMounted !== "true"
+      ) {
         root.dataset.heroMotionFallback = "visible";
       }
     }, 2000);
