@@ -462,8 +462,9 @@ html[data-motion="loading"]:not([data-hero-motion-fallback="visible"])
 
 .services-track {
   display: grid;
-  grid-template-columns: repeat(5, minmax(17rem, 1fr));
-  min-width: min(88rem, calc(17rem * 5));
+  grid-template-columns: repeat(5, clamp(17rem, 28vw, 24rem));
+  width: max-content;
+  min-width: 100%;
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
 }
@@ -490,6 +491,33 @@ html[data-motion="loading"]:not([data-hero-motion-fallback="visible"])
   margin: 1rem 0 0;
   color: var(--muted);
   line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .services-section {
+    padding-block: 0;
+  }
+
+  .services-pin {
+    display: grid;
+    min-height: 100vh;
+    min-height: 100svh;
+    align-items: center;
+    padding-block: clamp(2.5rem, 6vh, 4rem);
+  }
+
+  .services-section .section-heading {
+    margin-bottom: clamp(2rem, 5vh, 3.5rem);
+  }
+
+  .service-card {
+    min-height: clamp(20rem, 38vh, 23rem);
+  }
+
+  .services-section[data-services-motion="active"] .services-viewport {
+    overflow-x: clip;
+    padding-bottom: 0;
+  }
 }
 
 .works-section,
@@ -1113,6 +1141,7 @@ html[data-motion="loading"]:not([data-hero-motion-fallback="visible"])
   }
 
   .services-track {
+    width: 100%;
     min-width: 0;
     grid-template-columns: 1fr;
   }
