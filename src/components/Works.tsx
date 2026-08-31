@@ -1,10 +1,12 @@
 ﻿import { portfolioData } from "@/data/portfolio";
 
+import WorksMotion from "@/components/motion/WorksMotion";
+
 export default function Works() {
   return (
-    <section id="works" className="works-section section-band" aria-labelledby="works-heading">
+    <WorksMotion>
       <div className="section-shell">
-        <div className="works-heading">
+        <div className="works-heading" data-works="heading">
           <p className="eyebrow">Works</p>
           <h2 id="works-heading">Selected project slots, ready for real proof.</h2>
           <p>
@@ -13,15 +15,19 @@ export default function Works() {
         </div>
         <div className="project-list">
           {portfolioData.projects.map((project, index) => (
-            <article className="project-card" key={project.title}>
-              <div className="project-visual" aria-label={`${project.title} visual placeholder`}>
+            <article className="project-card" data-works-project key={project.title}>
+              <div
+                className="project-visual"
+                data-works="visual"
+                aria-label={`${project.title} visual placeholder`}
+              >
                 <span aria-hidden="true">0{index + 1}</span>
               </div>
-              <div className="project-copy">
-                <p className="project-type">{project.type}</p>
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-                <dl className="project-meta">
+              <div className="project-copy" data-works="copy">
+                <p className="project-type" data-works-copy-item>{project.type}</p>
+                <h3 data-works-copy-item>{project.title}</h3>
+                <p data-works-copy-item>{project.description}</p>
+                <dl className="project-meta" data-works-copy-item>
                   <div>
                     <dt>Meta</dt>
                     <dd>{project.meta}</dd>
@@ -31,7 +37,11 @@ export default function Works() {
                     <dd>{project.cta}</dd>
                   </div>
                 </dl>
-                <ul className="project-stack" aria-label={`${project.title} draft stack`}>
+                <ul
+                  className="project-stack"
+                  data-works-copy-item
+                  aria-label={`${project.title} draft stack`}
+                >
                   {project.stack.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
@@ -41,6 +51,6 @@ export default function Works() {
           ))}
         </div>
       </div>
-    </section>
+    </WorksMotion>
   );
 }
