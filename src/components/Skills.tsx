@@ -2,15 +2,16 @@
 
 import { useId, useState } from "react";
 import { portfolioData } from "@/data/portfolio";
+import SkillsMotion from "@/components/motion/SkillsMotion";
 
 export default function Skills() {
   const [activeCategory, setActiveCategory] = useState(portfolioData.skillGroups[0].id);
   const tabPrefix = useId();
 
   return (
-    <section id="skills" className="skills-section section-band" aria-labelledby="skills-heading">
+    <SkillsMotion>
       <div className="section-shell skills-shell">
-        <div className="skills-intro">
+        <div className="skills-intro" data-skills="intro">
           <p className="eyebrow">Skills</p>
           <h2 id="skills-heading">A practical matrix for the next build phase.</h2>
         </div>
@@ -24,6 +25,7 @@ export default function Skills() {
                 <button
                   className="skill-tab"
                   data-active={isActive}
+                  data-skills-tab
                   id={buttonId}
                   key={group.id}
                   onClick={() => setActiveCategory(group.id)}
@@ -46,13 +48,14 @@ export default function Skills() {
                   aria-labelledby={buttonId}
                   className="skill-panel"
                   data-active={isActive}
+                  data-skills-panel
                   id={panelId}
                   key={group.id}
                 >
-                  <h3>{group.label}</h3>
+                  <h3 data-skills-item>{group.label}</h3>
                   <ul>
                     {group.skills.map((skill) => (
-                      <li key={skill}>{skill}</li>
+                      <li data-skills-item key={skill}>{skill}</li>
                     ))}
                   </ul>
                 </article>
@@ -61,6 +64,6 @@ export default function Skills() {
           </div>
         </div>
       </div>
-    </section>
+    </SkillsMotion>
   );
 }
