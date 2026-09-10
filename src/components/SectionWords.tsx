@@ -1,16 +1,22 @@
-﻿import { portfolioData } from "@/data/portfolio";
+import { portfolioData } from "@/data/portfolio";
+import StatementMotion from "@/components/motion/StatementMotion";
 import SplitText from "@/components/ui/SplitText";
 
 export default function SectionWords() {
   return (
-    <section id="statement" className="statement-section" aria-label="Working statement">
+    <StatementMotion>
       {portfolioData.statements.map((statement, index) => (
-        <article className="statement-panel" data-tone={index === 1 ? "light" : "purple"} key={statement}>
-          <h2>
+        <article
+          className="statement-panel"
+          data-statement-scene
+          data-tone={index === 1 ? "light" : "purple"}
+          key={statement}
+        >
+          <h2 data-statement-heading>
             <SplitText text={statement} />
           </h2>
         </article>
       ))}
-    </section>
+    </StatementMotion>
   );
 }
