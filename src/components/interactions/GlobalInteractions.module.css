@@ -1,0 +1,31 @@
+.cursor {
+  position: fixed;
+  z-index: 200;
+  inset: 0 auto auto 0;
+  display: none;
+  inline-size: 0.35rem;
+  block-size: 0.35rem;
+  border-radius: 50%;
+  background: var(--purple);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-24px, -24px, 0);
+  transition: inline-size 160ms ease, block-size 160ms ease, opacity 120ms ease;
+  translate: -50% -50%;
+  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .cursor {
+    display: block;
+  }
+
+  .cursor[data-visible="true"] {
+    opacity: 0.72;
+  }
+
+  .cursor[data-interactive="true"] {
+    inline-size: 0.55rem;
+    block-size: 0.55rem;
+  }
+}

@@ -11,6 +11,11 @@ export type SkillGroup = {
   skills: string[];
 };
 
+export type NavigationItem = {
+  label: string;
+  href: `#${string}`;
+};
+
 export const portfolioData = {
   brandName: "ILHAM",
   fullName: "Muhammad Ilham",
@@ -30,7 +35,8 @@ export const portfolioData = {
     { label: "Works", href: "#works" },
     { label: "Skills", href: "#skills" },
     { label: "Contact", href: "#contact" },
-  ],
+  ] satisfies NavigationItem[],
+  menuWords: ["CREATE", "FOCUS", "DETAIL", "SHAPES", "CRAFTED", "CURIOUS"],
   socialLinks: [
     { platform: "github", label: "GitHub", href: null },
     { platform: "linkedin", label: "LinkedIn", href: null },

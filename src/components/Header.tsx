@@ -1,23 +1,27 @@
-﻿import { portfolioData } from "@/data/portfolio";
-import Clock from "@/components/Clock";
+import Signature from "@/components/brand/Signature";
+import type { BrandTone } from "@/components/brand/BrandMark";
+import HeaderInteractions from "@/components/header/HeaderInteractions";
+import { portfolioData } from "@/data/portfolio";
 
-export default function Header() {
+type HeaderProps = {
+  tone?: BrandTone;
+};
+
+export default function Header({ tone = "dark" }: HeaderProps) {
   return (
-    <header className="site-header">
-      <nav className="site-nav" aria-label="Primary navigation placeholder">
-        <div className="nav-slot nav-left">
-          <button className="menu-trigger" type="button" aria-label="Menu placeholder for future navigation">
-            <span aria-hidden="true" />
-            <span aria-hidden="true" />
-          </button>
-        </div>
-        <a className="wordmark" href="#home" aria-label={`${portfolioData.brandName} home`}>
-          {portfolioData.brandName}
-        </a>
-        <div className="nav-slot nav-right">
-          <Clock />
-        </div>
-      </nav>
-    </header>
+    <HeaderInteractions
+      brandName={portfolioData.brandName}
+      menuWords={portfolioData.menuWords}
+      navigation={portfolioData.navigation}
+      tone={tone}
+      signature={
+        <Signature
+          className="header-signature"
+          decorative
+          priority
+          tone={tone}
+        />
+      }
+    />
   );
 }

@@ -1,4 +1,5 @@
-﻿import type { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from "next";
+import GlobalInteractions from "@/components/interactions/GlobalInteractions";
 import MotionProvider from "@/components/motion/MotionProvider";
 import { portfolioData } from "@/data/portfolio";
 import "lenis/dist/lenis.css";
@@ -46,7 +47,10 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: HERO_MOTION_BOOTSTRAP }} />
       </head>
       <body>
-        <MotionProvider>{children}</MotionProvider>
+        <MotionProvider>
+          <GlobalInteractions />
+          {children}
+        </MotionProvider>
       </body>
     </html>
   );

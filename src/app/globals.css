@@ -38,6 +38,10 @@ html {
   background: var(--background);
 }
 
+html[data-menu-open="true"] {
+  overflow: clip;
+}
+
 body {
   min-height: 100vh;
   min-height: 100svh;
@@ -151,93 +155,6 @@ textarea:focus-visible {
   padding-top: 0.45rem;
   text-decoration: none;
   text-transform: uppercase;
-}
-
-.site-header {
-  position: fixed;
-  inset: 0 0 auto;
-  z-index: 40;
-  color: var(--ink);
-  pointer-events: none;
-}
-
-.site-nav {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  min-height: var(--header-block-size);
-  padding-top: var(--safe-top);
-  padding-right: max(var(--gutter), var(--safe-right));
-  padding-left: max(var(--gutter), var(--safe-left));
-  border-bottom: 1px solid rgb(23 21 26 / 0.12);
-  background: rgb(247 245 240 / 0.78);
-  backdrop-filter: blur(16px);
-}
-
-.nav-slot {
-  display: flex;
-  align-items: center;
-}
-
-.nav-left {
-  justify-content: flex-start;
-}
-
-.nav-right {
-  justify-content: flex-end;
-}
-
-.menu-trigger,
-.wordmark,
-.clock {
-  pointer-events: auto;
-}
-
-.menu-trigger {
-  display: inline-grid;
-  width: 2.75rem;
-  height: 2.75rem;
-  place-items: center;
-  border: 1px solid rgb(23 21 26 / 0.18);
-  border-radius: 999px;
-  background: rgb(255 255 255 / 0.62);
-  color: var(--ink);
-  cursor: pointer;
-}
-
-.menu-trigger span {
-  display: block;
-  width: 1.05rem;
-  height: 2px;
-  background: currentColor;
-}
-
-.menu-trigger span + span {
-  margin-top: -0.7rem;
-}
-
-.wordmark {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  color: var(--ink);
-  font-size: clamp(1.25rem, 2vw, 1.65rem);
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  text-decoration: none;
-}
-
-.clock {
-  display: inline-block;
-  min-width: 5ch;
-  color: var(--ink);
-  font-size: 0.82rem;
-  font-variant-numeric: tabular-nums;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  text-align: right;
 }
 
 .hero-section {
@@ -1026,24 +943,6 @@ html[data-motion="loading"]:not([data-hero-motion-fallback="visible"])
   :root {
     --header-height: 68px;
     --gutter: clamp(1rem, 5vw, 1.35rem);
-  }
-
-  .site-nav {
-    min-height: var(--header-height);
-    padding-inline: var(--gutter);
-  }
-
-  .menu-trigger {
-    width: 2.75rem;
-    height: 2.75rem;
-  }
-
-  .wordmark {
-    font-size: 1.08rem;
-  }
-
-  .clock {
-    font-size: 0.76rem;
   }
 
   .split-heading,
