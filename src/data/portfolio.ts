@@ -1,4 +1,5 @@
 ﻿export type SocialLink = {
+  platform: "github" | "linkedin" | "instagram";
   label: string;
   href: string | null;
 };
@@ -31,9 +32,9 @@ export const portfolioData = {
     { label: "Contact", href: "#contact" },
   ],
   socialLinks: [
-    { label: "GitHub", href: null },
-    { label: "LinkedIn", href: null },
-    { label: "Email", href: null },
+    { platform: "github", label: "GitHub", href: null },
+    { platform: "linkedin", label: "LinkedIn", href: null },
+    { platform: "instagram", label: "Instagram", href: null },
   ] satisfies SocialLink[],
   services: [
     {

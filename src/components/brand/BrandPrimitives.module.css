@@ -1,0 +1,47 @@
+.asset {
+  display: inline-flex;
+  max-inline-size: 100%;
+  color: var(--brand-asset-color, currentColor);
+  line-height: 0;
+  vertical-align: middle;
+}
+
+.assetImage {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.brandMark {
+  inline-size: var(--brand-mark-size, 3rem);
+}
+
+.signature {
+  inline-size: var(--signature-size, 9rem);
+}
+
+.assetFallback {
+  display: inline-grid;
+  min-block-size: 2.75rem;
+  padding: 0.6rem 0.75rem;
+  place-items: center;
+  border: 1px dashed currentColor;
+  color: inherit;
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.giantWordmark {
+  display: block;
+  max-inline-size: 100%;
+  color: var(--giant-wordmark-color, currentColor);
+  font-family: inherit;
+  font-size: var(--giant-wordmark-size, clamp(5rem, 20vw, 18rem));
+  font-weight: var(--giant-wordmark-weight, 950);
+  letter-spacing: var(--giant-wordmark-tracking, 0);
+  line-height: var(--giant-wordmark-leading, 0.72);
+  white-space: var(--giant-wordmark-wrap, nowrap);
+}
