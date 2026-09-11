@@ -1,7 +1,6 @@
 .asset {
   display: inline-flex;
   max-inline-size: 100%;
-  color: var(--brand-asset-color, currentColor);
   line-height: 0;
   vertical-align: middle;
 }
@@ -12,26 +11,20 @@
   block-size: auto;
 }
 
+.toneDark .assetImage {
+  filter: none;
+}
+
+.toneLight .assetImage {
+  filter: invert(1);
+}
+
 .brandMark {
   inline-size: var(--brand-mark-size, 3rem);
 }
 
 .signature {
   inline-size: var(--signature-size, 9rem);
-}
-
-.assetFallback {
-  display: inline-grid;
-  min-block-size: 2.75rem;
-  padding: 0.6rem 0.75rem;
-  place-items: center;
-  border: 1px dashed currentColor;
-  color: inherit;
-  font-size: 0.625rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  line-height: 1.2;
-  text-transform: uppercase;
 }
 
 .giantWordmark {

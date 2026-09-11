@@ -1,15 +1,11 @@
 import Image from "next/image";
-import type { BrandAssetSource } from "./BrandMark";
+import type { BrandTone } from "./BrandMark";
 import styles from "./BrandPrimitives.module.css";
 
-export const SIGNATURE_ASSET_SLOTS = {
-  black: "/brand/ilham-signature-black.svg",
-  white: "/brand/ilham-signature-white.svg",
-} as const;
+export const SIGNATURE_SOURCE = "/brand/signature-black.png";
 
 type SignatureProps = {
-  sources?: Partial<Record<keyof typeof SIGNATURE_ASSET_SLOTS, BrandAssetSource>>;
-  variant?: keyof typeof SIGNATURE_ASSET_SLOTS;
+  tone?: BrandTone;
   className?: string;
   decorative?: boolean;
   label?: string;
@@ -17,48 +13,38 @@ type SignatureProps = {
 };
 
 export default function Signature({
-  sources,
-  variant = "black",
+  tone = "dark",
   className,
   decorative = false,
   label = "Ilham signature",
   priority = false,
 }: SignatureProps) {
-  const source = sources?.[variant];
-  const classes = [styles.asset, styles.signature, className].filter(Boolean).join(" ");
-
-  if (!source) {
-    return (
-      <span
-        className={`${classes} ${styles.assetFallback}`}
-        data-brand-asset="signature"
-        data-brand-asset-status="missing"
-        data-signature-root=""
-        aria-hidden={decorative || undefined}
-        aria-label={decorative ? undefined : label}
-        role={decorative ? undefined : "img"}
-      >
-        <span aria-hidden="true">Signature asset pending</span>
-      </span>
-    );
-  }
+  const classes = [
+    styles.asset,
+    styles.signature,
+    tone === "light" ? styles.toneLight : styles.toneDark,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <span
       className={classes}
       data-brand-asset="signature"
       data-brand-asset-status="ready"
+      data-brand-tone={tone}
       data-signature-root=""
       aria-hidden={decorative || undefined}
     >
       <Image
         className={styles.assetImage}
         data-signature-source=""
-        src={source.src}
-        width={source.width}
-        height={source.height}
+        src={SIGNATURE_SOURCE}
+        width={1774}
+        height={887}
         alt={decorative ? "" : label}
-        priority={priority}
+        preload={priority}
         unoptimized
       />
     </span>

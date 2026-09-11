@@ -1,20 +1,12 @@
 import Image from "next/image";
 import styles from "./BrandPrimitives.module.css";
 
-export const BRAND_MARK_ASSET_SLOTS = {
-  black: "/brand/ih14-mark-black.svg",
-  white: "/brand/ih14-mark-white.svg",
-} as const;
+export const BRAND_MARK_SOURCE = "/brand/ih14-mark-black.png";
 
-export type BrandAssetSource = {
-  src: string;
-  width: number;
-  height: number;
-};
+export type BrandTone = "dark" | "light";
 
 type BrandMarkProps = {
-  sources?: Partial<Record<keyof typeof BRAND_MARK_ASSET_SLOTS, BrandAssetSource>>;
-  variant?: keyof typeof BRAND_MARK_ASSET_SLOTS;
+  tone?: BrandTone;
   className?: string;
   decorative?: boolean;
   label?: string;
@@ -22,45 +14,36 @@ type BrandMarkProps = {
 };
 
 export default function BrandMark({
-  sources,
-  variant = "black",
+  tone = "dark",
   className,
   decorative = false,
   label = "IH/14 brand mark",
   priority = false,
 }: BrandMarkProps) {
-  const source = sources?.[variant];
-  const classes = [styles.asset, styles.brandMark, className].filter(Boolean).join(" ");
-
-  if (!source) {
-    return (
-      <span
-        className={`${classes} ${styles.assetFallback}`}
-        data-brand-asset="ih14"
-        data-brand-asset-status="missing"
-        aria-hidden={decorative || undefined}
-        aria-label={decorative ? undefined : label}
-        role={decorative ? undefined : "img"}
-      >
-        <span aria-hidden="true">IH/14 asset pending</span>
-      </span>
-    );
-  }
+  const classes = [
+    styles.asset,
+    styles.brandMark,
+    tone === "light" ? styles.toneLight : styles.toneDark,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <span
       className={classes}
       data-brand-asset="ih14"
       data-brand-asset-status="ready"
+      data-brand-tone={tone}
       aria-hidden={decorative || undefined}
     >
       <Image
         className={styles.assetImage}
-        src={source.src}
-        width={source.width}
-        height={source.height}
+        src={BRAND_MARK_SOURCE}
+        width={1334}
+        height={1179}
         alt={decorative ? "" : label}
-        priority={priority}
+        preload={priority}
         unoptimized
       />
     </span>
