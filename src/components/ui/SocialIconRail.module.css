@@ -40,18 +40,39 @@
 
 .link {
   text-decoration: none;
+  transition: color 180ms ease, transform 180ms ease;
 }
 
-.link:hover {
-  color: var(--social-rail-icon-hover-color, var(--ink));
+.link:hover,
+.link:focus-visible {
+  color: var(--social-rail-icon-hover-color, var(--purple));
+  transform: translateY(-1px);
 }
 
 .pending {
-  opacity: 0.45;
+  opacity: 0.78;
 }
 
 .icon {
   display: block;
-  inline-size: var(--social-rail-icon-size, 1.125rem);
-  block-size: var(--social-rail-icon-size, 1.125rem);
+  inline-size: var(--social-rail-icon-size, 1.3rem);
+  block-size: var(--social-rail-icon-size, 1.3rem);
+}
+
+.iconCutoutFill {
+  fill: var(--paper);
+}
+
+.iconCutoutStroke {
+  fill: none;
+  stroke: var(--paper);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
 }

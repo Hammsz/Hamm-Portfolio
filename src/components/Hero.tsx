@@ -1,30 +1,38 @@
-﻿import { portfolioData } from "@/data/portfolio";
+import GiantWordmark from "@/components/brand/GiantWordmark";
+import HeroBrandVisual from "@/components/hero/HeroBrandVisual";
 import HeroMotion from "@/components/motion/HeroMotion";
-import SocialLinks from "@/components/ui/SocialLinks";
+import SocialIconRail from "@/components/ui/SocialIconRail";
+import { portfolioData } from "@/data/portfolio";
+import styles from "./Hero.module.css";
 
 export default function Hero() {
-  const { brandName, person, socialLinks } = portfolioData;
+  const { hero, socialLinks } = portfolioData;
 
   return (
-    <HeroMotion>
-      <div className="hero-shell section-shell">
-        <div className="hero-meta" data-hero="meta" aria-label="Profile summary">
-          <span>{person.role}</span>
-          <span>{person.location}</span>
+    <HeroMotion className={styles.hero}>
+      <div className={styles.shell}>
+        <div className={styles.markAnchor}>
+          <HeroBrandVisual className={styles.markReveal} markClassName={styles.mark} />
         </div>
-        <div className="hero-copy" data-hero="copy">
-          <p>{person.tagline}</p>
-          <a className="text-button" href="#works">
-            View draft work
-          </a>
+        <div className={styles.microcopy} data-hero="microcopy" aria-label="Introduction">
+          <p data-hero="microcopy-item">{hero.microcopyLeft}</p>
+          <p data-hero="microcopy-item">{hero.microcopyRight}</p>
         </div>
-        <h1 id="hero-heading" className="hero-title" data-hero="title">
-          {brandName}
+        <h1 id="hero-heading" className={styles.wordmark} data-hero="wordmark">
+          <GiantWordmark
+            className={`${styles.wordmarkText} ${styles.desktopWordmark}`}
+            label={portfolioData.fullName}
+            text={portfolioData.fullName.toUpperCase()}
+          />
+          <GiantWordmark
+            className={`${styles.wordmarkText} ${styles.mobileWordmark}`}
+            label={portfolioData.brandName}
+            text={portfolioData.brandName.toUpperCase()}
+          />
         </h1>
-        <nav className="hero-socials" data-hero="socials" aria-label="Social profile placeholders">
-          <span className="social-rule" data-hero="social-rule" aria-hidden="true" />
-          <SocialLinks links={socialLinks} className="social-links-rail" />
-        </nav>
+        <div className={styles.socialAnchor} data-hero="socials">
+          <SocialIconRail links={socialLinks} className={styles.socialRail} label="Social profiles" />
+        </div>
       </div>
     </HeroMotion>
   );

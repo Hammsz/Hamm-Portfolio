@@ -2,6 +2,8 @@
   display: inline-flex;
   max-inline-size: 100%;
   line-height: 0;
+  user-select: none;
+  -webkit-user-select: none;
   vertical-align: middle;
 }
 
@@ -9,6 +11,9 @@
   display: block;
   inline-size: 100%;
   block-size: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 
 .toneDark .assetImage {

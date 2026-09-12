@@ -65,7 +65,7 @@ export default function GlobalInteractions() {
     };
 
     const handleClick = (event: MouseEvent) => {
-      if (!precisePointer.matches || !(event.target instanceof Element)) return;
+      if (!event.isTrusted || !precisePointer.matches || !(event.target instanceof Element)) return;
 
       const target = event.target.closest<HTMLElement>(INTERACTIVE_SELECTOR);
       if (!target || target.matches(':disabled, [aria-disabled="true"]')) return;

@@ -43,6 +43,7 @@ export default function BrandMark({
         width={1334}
         height={1179}
         alt={decorative ? "" : label}
+        draggable={false}
         preload={priority}
         unoptimized
       />

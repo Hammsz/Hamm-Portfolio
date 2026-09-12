@@ -1,0 +1,297 @@
+.loader {
+  --loader-columns: 6;
+  --loader-rows: 4;
+  --loader-grid-color: rgb(123 47 247 / 0.28);
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: grid;
+  min-block-size: 100vh;
+  min-block-size: 100svh;
+  place-items: center;
+  background: var(--paper);
+  color: var(--ink);
+  isolation: isolate;
+  overflow: clip;
+  animation: safetyRelease 1ms linear 2.65s forwards;
+  transition:
+    opacity 380ms cubic-bezier(0.76, 0, 0.24, 1),
+    visibility 380ms step-end;
+}
+
+.loader[data-exiting="true"] {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.gridLineLayer {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--loader-columns), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--loader-rows), minmax(0, 1fr));
+  border-inline-end: 1px solid var(--loader-grid-color);
+  border-block-end: 1px solid var(--loader-grid-color);
+  pointer-events: none;
+  transition: border-color 160ms ease;
+}
+
+.gridLineCell {
+  min-inline-size: 0;
+  min-block-size: 0;
+  border-inline-start: 1px solid var(--loader-grid-color);
+  border-block-start: 1px solid var(--loader-grid-color);
+  transition: border-color 160ms ease;
+}
+
+.mosaic {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--loader-columns), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--loader-rows), minmax(0, 1fr));
+  background: transparent;
+  pointer-events: none;
+}
+
+.mosaicCell {
+  min-inline-size: 0;
+  min-block-size: 0;
+  background: transparent;
+  transform: scaleY(1);
+}
+
+.mosaicCell:nth-child(odd) {
+  transform-origin: 50% 0;
+}
+
+.mosaicCell:nth-child(even) {
+  transform-origin: 50% 100%;
+}
+
+.loader[data-phase="complete"] {
+  --loader-grid-color: rgb(123 47 247 / 0.38);
+}
+
+.loader[data-phase="mosaic"] {
+  --loader-grid-color: rgb(53 16 112 / 0.46);
+  background: var(--purple);
+}
+
+.loader[data-phase="handoff"] {
+  --loader-grid-color: rgb(53 16 112 / 0.46);
+  background: var(--purple);
+}
+
+.loader[data-phase="mosaic"] .mosaic {
+  background: var(--purple);
+}
+
+.loader[data-phase="mosaic"] .mosaicCell {
+  background: var(--paper);
+  animation: mosaicPanelExit 560ms cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(1),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(16) {
+  animation-delay: 88ms;
+}
+
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(2),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(11),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(19) {
+  animation-delay: 32ms;
+}
+
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(3),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(13),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(23) {
+  animation-delay: 64ms;
+}
+
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(4),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(14) {
+  animation-delay: 8ms;
+}
+
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(5),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(8),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(20) {
+  animation-delay: 80ms;
+}
+
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(6),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(15),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(24) {
+  animation-delay: 40ms;
+}
+
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(7),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(17) {
+  animation-delay: 16ms;
+}
+
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(9),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(22) {
+  animation-delay: 0ms;
+}
+
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(10),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(18),
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(21) {
+  animation-delay: 48ms;
+}
+
+.loader[data-phase="mosaic"] .mosaicCell:nth-child(12) {
+  animation-delay: 88ms;
+}
+
+.centerpiece {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  inline-size: clamp(22rem, 38vw, 38rem);
+  justify-items: center;
+  gap: clamp(0.85rem, 2vw, 1.4rem);
+  text-align: center;
+  transition:
+    opacity 220ms ease 100ms,
+    transform 300ms cubic-bezier(0.22, 1, 0.36, 1) 100ms;
+}
+
+.loader[data-phase="mosaic"] .centerpiece,
+.loader[data-phase="handoff"] .centerpiece {
+  opacity: 0;
+  transform: translateY(clamp(-1rem, -1.1vw, -0.65rem)) scale(0.985);
+}
+
+.signatureReveal {
+  --signature-size: clamp(20rem, 29vw, 31rem);
+  opacity: 0;
+  transform: translateY(0.65rem);
+  animation: signatureEnter 560ms cubic-bezier(0.22, 1, 0.36, 1) 80ms forwards;
+}
+
+.status {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--type-support);
+  font-size: clamp(0.62rem, 0.58vw, 0.72rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.progress {
+  position: relative;
+  display: flex;
+  inline-size: clamp(12rem, 22vw, 20rem);
+  align-items: flex-start;
+  justify-content: center;
+  margin-block-start: clamp(0.35rem, 1vw, 0.75rem);
+  padding-block-end: 0.65rem;
+  font-family: var(--type-display);
+  font-size: clamp(3.75rem, 5.2vw, 6.25rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.075em;
+  line-height: 0.74;
+}
+
+.progress::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  block-size: 1px;
+  background: var(--purple);
+  opacity: 0.45;
+  content: "";
+}
+
+.percent {
+  margin-inline-start: 0.2em;
+  color: var(--purple);
+  font-family: var(--type-support);
+  font-size: 0.22em;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+@keyframes signatureEnter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mosaicPanelExit {
+  0% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  100% {
+    opacity: 0.92;
+    transform: scaleY(0);
+  }
+}
+
+@keyframes safetyRelease {
+  to {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 767px) {
+  .loader {
+    --loader-columns: 4;
+    --loader-rows: 6;
+  }
+
+  .centerpiece {
+    inline-size: min(calc(100vw - 2rem), 26rem);
+    gap: clamp(0.75rem, 3.5vw, 1rem);
+  }
+
+  .signatureReveal {
+    --signature-size: clamp(15rem, 68vw, 20rem);
+  }
+
+  .status {
+    font-size: clamp(0.58rem, 2.5vw, 0.66rem);
+  }
+
+  .progress {
+    inline-size: clamp(10rem, 58vw, 15rem);
+    font-size: clamp(3.25rem, 14vw, 4.25rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader {
+    animation-delay: 120ms;
+    transition-duration: 1ms;
+  }
+
+  .signatureReveal {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .mosaic,
+  .mosaicCell,
+  .centerpiece,
+  .gridLineLayer,
+  .gridLineCell {
+    animation: none;
+    transition-duration: 1ms;
+  }
+}

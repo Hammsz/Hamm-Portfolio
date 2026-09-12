@@ -1,0 +1,64 @@
+.time {
+  display: inline-grid;
+  inline-size: 8ch;
+  block-size: 1.25em;
+  grid-template-columns: repeat(8, 1ch);
+  align-items: center;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  font-variant-ligatures: none;
+  font-feature-settings: "tnum" 1, "zero" 0;
+  letter-spacing: 0;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.character {
+  position: relative;
+  display: grid;
+  block-size: 1.25em;
+  line-height: 1.25;
+  place-items: center;
+  overflow: clip;
+}
+
+.current {
+  grid-area: 1 / 1;
+}
+
+.character[data-changed="true"]::before {
+  content: attr(data-previous-character);
+  grid-area: 1 / 1;
+  animation: digitOut 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
+}
+
+.incoming {
+  animation: digitIn 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
+}
+
+@keyframes digitOut {
+  to {
+    opacity: 0;
+    transform: translateY(-115%);
+  }
+}
+
+@keyframes digitIn {
+  from {
+    opacity: 0.2;
+    transform: translateY(115%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .character[data-changed="true"]::before {
+    display: none;
+    animation: none;
+  }
+
+  .incoming {
+    animation: none;
+  }
+}

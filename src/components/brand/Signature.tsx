@@ -44,6 +44,7 @@ export default function Signature({
         width={1774}
         height={887}
         alt={decorative ? "" : label}
+        draggable={false}
         preload={priority}
         unoptimized
       />

@@ -3,10 +3,11 @@
   z-index: 200;
   inset: 0 auto auto 0;
   display: none;
-  inline-size: 0.35rem;
-  block-size: 0.35rem;
+  inline-size: 1rem;
+  block-size: 1rem;
   border-radius: 50%;
-  background: var(--purple);
+  background: #ffffff;
+  mix-blend-mode: difference;
   opacity: 0;
   pointer-events: none;
   transform: translate3d(-24px, -24px, 0);
@@ -21,11 +22,11 @@
   }
 
   .cursor[data-visible="true"] {
-    opacity: 0.72;
+    opacity: 0.96;
   }
 
   .cursor[data-interactive="true"] {
-    inline-size: 0.55rem;
-    block-size: 0.55rem;
+    inline-size: 1.35rem;
+    block-size: 1.35rem;
   }
 }

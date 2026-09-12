@@ -11,6 +11,7 @@ const HERO_MOTION_BOOTSTRAP = `
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     root.dataset.motion = reduceMotion ? "reduced" : "loading";
+    root.dataset.loader = reduceMotion ? "reduced" : "pending";
 
     if (reduceMotion) return;
 
@@ -22,6 +23,13 @@ const HERO_MOTION_BOOTSTRAP = `
         root.dataset.heroMotionFallback = "visible";
       }
     }, 2000);
+
+    window.setTimeout(() => {
+      if (root.dataset.loader === "pending" || root.dataset.loader === "active") {
+        root.dataset.loader = "fallback";
+        root.dataset.heroMotionFallback = "visible";
+      }
+    }, 2450);
   })();
 `;
 
@@ -44,6 +52,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=general-sans@400,500,600&display=swap"
+          rel="stylesheet"
+        />
         <script dangerouslySetInnerHTML={{ __html: HERO_MOTION_BOOTSTRAP }} />
       </head>
       <body>

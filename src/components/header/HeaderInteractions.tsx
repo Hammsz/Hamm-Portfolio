@@ -60,6 +60,7 @@ export default function HeaderInteractions({
   const [wordIndex, setWordIndex] = useState(0);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const closeTimerRef = useRef<number | undefined>(undefined);
+  const headerRef = useRef<HTMLElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const openingFrameRef = useRef<number | undefined>(undefined);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -157,6 +158,73 @@ export default function HeaderInteractions({
     menuButtonRef.current?.focus({ preventScroll: true });
   }, [isMenuMounted]);
 
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    if (isMenuMounted) {
+      header.dataset.scrollHidden = "false";
+      return;
+    }
+
+    let lastScrollY = window.scrollY;
+    let frame = 0;
+
+    const syncSurfaceTone = () => {
+      const sampleY = Math.min(
+        Math.max(header.getBoundingClientRect().height / 2, 1),
+        window.innerHeight - 1,
+      );
+      const surface = document
+        .elementsFromPoint(window.innerWidth / 2, sampleY)
+        .find(
+          (element) =>
+            !element.closest("[data-site-header]") &&
+            (element.tagName === "SECTION" || element.tagName === "FOOTER"),
+        );
+
+      if (!surface) return;
+
+      const channels = getComputedStyle(surface).backgroundColor.match(/[\d.]+/g);
+      if (!channels || channels.length < 3) return;
+
+      const [red, green, blue] = channels.slice(0, 3).map(Number);
+      const luminance = red * 0.2126 + green * 0.7152 + blue * 0.0722;
+      header.dataset.surface = luminance < 128 ? "dark" : "light";
+    };
+
+    const syncHeader = () => {
+      frame = 0;
+      const nextScrollY = Math.max(window.scrollY, 0);
+      const delta = nextScrollY - lastScrollY;
+
+      if (nextScrollY <= 88) {
+        header.dataset.scrollHidden = "false";
+      } else if (Math.abs(delta) >= 5) {
+        header.dataset.scrollHidden = String(delta > 0);
+      }
+
+      lastScrollY = nextScrollY;
+      syncSurfaceTone();
+    };
+
+    const handleScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(syncHeader);
+    };
+
+    header.dataset.scrollHidden = "false";
+    syncSurfaceTone();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+      window.cancelAnimationFrame(frame);
+    };
+  }, [isMenuMounted]);
+
   useEffect(
     () => () => {
       window.cancelAnimationFrame(openingFrameRef.current ?? 0);
@@ -184,6 +252,7 @@ export default function HeaderInteractions({
       data-menu-open={isMenuMounted}
       data-site-header=""
       data-tone={tone}
+      ref={headerRef}
     >
       <div className={styles.bar} data-header-bar="">
         <div className={styles.leftSlot}>
@@ -205,6 +274,7 @@ export default function HeaderInteractions({
         <a
           aria-label={`${brandName} home`}
           className={styles.signatureLink}
+          draggable={false}
           href="#home"
           onClick={(event) => {
             event.preventDefault();

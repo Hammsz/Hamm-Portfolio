@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import styles from "./Clock.module.css";
 
 function getLocalTime() {
   const now = new Date();
@@ -12,13 +13,20 @@ function getLocalTime() {
 }
 
 export default function Clock() {
-  const [time, setTime] = useState("--:--:--");
+  const [clock, setClock] = useState({ current: "--:--:--", previous: "--:--:--" });
 
   useEffect(() => {
     let intervalId: number | undefined;
     let timeoutId: number | undefined;
 
-    const update = () => setTime(getLocalTime());
+    const update = () => {
+      const nextTime = getLocalTime();
+      setClock((previousClock) =>
+        previousClock.current === nextTime
+          ? previousClock
+          : { current: nextTime, previous: previousClock.current },
+      );
+    };
     const clearTimers = () => {
       window.clearTimeout(timeoutId);
       window.clearInterval(intervalId);
@@ -53,5 +61,26 @@ export default function Clock() {
     };
   }, []);
 
-  return <time aria-label={`Visitor local time ${time}`}>{time}</time>;
+  return (
+    <time className={styles.time} aria-label={`Visitor local time ${clock.current}`}>
+      {Array.from(clock.current).map((character, index) => {
+        const previousCharacter = clock.previous[index] ?? character;
+        const changed = character !== previousCharacter;
+
+        return (
+          <span
+            className={styles.character}
+            data-changed={changed}
+            data-previous-character={previousCharacter}
+            key={`${index}-${changed ? `${previousCharacter}-${character}` : character}`}
+            aria-hidden="true"
+          >
+            <span className={`${styles.current}${changed ? ` ${styles.incoming}` : ""}`}>
+              {character}
+            </span>
+          </span>
+        );
+      })}
+    </time>
+  );
 }

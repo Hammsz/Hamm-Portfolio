@@ -28,6 +28,10 @@ export const portfolioData = {
     availability: "Available for selected internships, freelance builds, and collaboration.",
     emailLabel: "contact pending",
   },
+  hero: {
+    microcopyLeft: "Computer Science Student & Developer",
+    microcopyRight: "Building ideas into useful experiences",
+  },
   navigation: [
     { label: "Home", href: "#home" },
     { label: "About", href: "#about" },
