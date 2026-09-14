@@ -58,6 +58,10 @@ export default function RootLayout({
           href="https://api.fontshare.com/v2/css?f[]=clash-display@700&f[]=general-sans@400,500,600&display=swap"
           rel="stylesheet"
         />
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=gambarino@400&display=swap"
+          rel="stylesheet"
+        />
         <script dangerouslySetInnerHTML={{ __html: HERO_MOTION_BOOTSTRAP }} />
       </head>
       <body>

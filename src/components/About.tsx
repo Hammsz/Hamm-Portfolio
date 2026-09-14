@@ -1,38 +1,34 @@
 ﻿import AboutMotion from "@/components/motion/AboutMotion";
+import AboutPortrait from "@/components/about/AboutPortrait";
 import { portfolioData } from "@/data/portfolio";
+import styles from "./About.module.css";
 
 export default function About() {
   const { brandName, fullName, person } = portfolioData;
 
   return (
-    <AboutMotion>
-      <div className="section-shell about-shell">
-        <div className="section-heading centered-heading" data-about="heading">
-          <p className="eyebrow">About</p>
-          <h2 id="about-heading">About Me</h2>
+    <AboutMotion className={styles.section}>
+      <div className={styles.inner}>
+        <div className={styles.heading} data-about="heading">
+          <p className={styles.eyebrow}>01 / About</p>
+          <h2 id="about-heading">About</h2>
         </div>
-        <div className="about-layout" data-about="layout">
+        <div className={styles.layout} data-about="layout">
           <article
-            className="about-copy"
+            className={styles.copy}
             data-about="copy"
             aria-label={`${fullName} profile draft`}
           >
-            <p data-about="body">{person.summary}</p>
-            <p className="about-note" data-about="detail">
+            <p className={styles.lead} data-about="body">{person.summary}</p>
+            <p className={styles.note} data-about="detail">
               {person.availability}
             </p>
-            <a className="text-button" data-about="cta" href="#contact">
-              Start a conversation
+            <a className={styles.cta} data-about="cta" href="#contact">
+              <span>Start a conversation</span>
+              <span aria-hidden="true">↘</span>
             </a>
           </article>
-          <figure
-            className="portrait-frame"
-            data-about="portrait"
-            aria-label={`${fullName} portrait placeholder`}
-          >
-            <div className="portrait-mark" aria-hidden="true">{brandName}</div>
-            <figcaption>Portrait asset pending</figcaption>
-          </figure>
+          <AboutPortrait brandName={brandName} fullName={fullName} />
         </div>
       </div>
     </AboutMotion>

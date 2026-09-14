@@ -4,9 +4,10 @@ import { type ReactNode, useEffect, useRef } from "react";
 
 type AboutMotionProps = {
   children: ReactNode;
+  className?: string;
 };
 
-export default function AboutMotion({ children }: AboutMotionProps) {
+export default function AboutMotion({ children, className }: AboutMotionProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -269,7 +270,7 @@ export default function AboutMotion({ children }: AboutMotionProps) {
     <section
       ref={sectionRef}
       id="about"
-      className="about-section section-band"
+      className={className}
       aria-labelledby="about-heading"
     >
       {children}

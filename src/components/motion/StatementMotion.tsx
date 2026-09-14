@@ -5,6 +5,7 @@ import type { ScrollTrigger } from "gsap/ScrollTrigger";
 
 type StatementMotionProps = {
   children: ReactNode;
+  className?: string;
 };
 
 type CharacterOffset = {
@@ -48,7 +49,7 @@ const getCharacterOffset = (
   };
 };
 
-export default function StatementMotion({ children }: StatementMotionProps) {
+export default function StatementMotion({ children, className }: StatementMotionProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -357,7 +358,7 @@ export default function StatementMotion({ children }: StatementMotionProps) {
     <section
       ref={sectionRef}
       id="statement"
-      className="statement-section"
+      className={className}
       aria-label="Working statement"
     >
       {children}

@@ -4,9 +4,10 @@ import { type ReactNode, useEffect, useRef } from "react";
 
 type WorksMotionProps = {
   children: ReactNode;
+  className?: string;
 };
 
-export default function WorksMotion({ children }: WorksMotionProps) {
+export default function WorksMotion({ children, className }: WorksMotionProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -75,9 +76,10 @@ export default function WorksMotion({ children }: WorksMotionProps) {
               reduceMotion: "(prefers-reduced-motion: reduce)",
             },
             (mediaContext) => {
-              const { mobile, tablet, reduceMotion } = mediaContext.conditions as {
+              const { mobile, tablet, desktop, reduceMotion } = mediaContext.conditions as {
                 mobile: boolean;
                 tablet: boolean;
+                desktop: boolean;
                 reduceMotion: boolean;
               };
 
@@ -126,12 +128,16 @@ export default function WorksMotion({ children }: WorksMotionProps) {
 
               const visualTimelines: gsap.core.Timeline[] = [];
               const copyTimelines: gsap.core.Timeline[] = [];
+              const parallaxTweens: gsap.core.Tween[] = [];
 
               cards.forEach((card, index) => {
                 const visual = card.querySelector<HTMLElement>('[data-works="visual"]');
                 const copy = card.querySelector<HTMLElement>('[data-works="copy"]');
                 const copyItems = card.querySelectorAll<HTMLElement>(
                   "[data-works-copy-item]",
+                );
+                const mediaPlane = card.querySelector<HTMLElement>(
+                  "[data-project-media-plane]",
                 );
 
                 if (!visual || !copy || !copyItems.length) return;
@@ -213,12 +219,33 @@ export default function WorksMotion({ children }: WorksMotionProps) {
 
                   copyTimelines.push(copyTimeline);
                 }
+
+                if (desktop && mediaPlane) {
+                  const parallaxTween = gsap.fromTo(
+                    mediaPlane,
+                    { yPercent: -3 },
+                    {
+                      yPercent: 3,
+                      ease: "none",
+                      scrollTrigger: {
+                        id: `works-media-parallax-${index + 1}`,
+                        trigger: visual,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 0.45,
+                        invalidateOnRefresh: true,
+                      },
+                    },
+                  );
+                  parallaxTweens.push(parallaxTween);
+                }
               });
 
               return () => {
                 headingTimeline?.kill();
                 visualTimelines.forEach((timeline) => timeline.kill());
                 copyTimelines.forEach((timeline) => timeline.kill());
+                parallaxTweens.forEach((tween) => tween.kill());
                 clearHeadingStyles();
 
                 cards.forEach((card) => {
@@ -290,7 +317,7 @@ export default function WorksMotion({ children }: WorksMotionProps) {
     <section
       ref={sectionRef}
       id="works"
-      className="works-section section-band"
+      className={className}
       aria-labelledby="works-heading"
     >
       {children}

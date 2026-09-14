@@ -4,9 +4,10 @@ import { type ReactNode, useEffect, useRef } from "react";
 
 type SkillsMotionProps = {
   children: ReactNode;
+  className?: string;
 };
 
-export default function SkillsMotion({ children }: SkillsMotionProps) {
+export default function SkillsMotion({ children, className }: SkillsMotionProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export default function SkillsMotion({ children }: SkillsMotionProps) {
               reduceMotion: "(prefers-reduced-motion: reduce)",
             },
             (mediaContext) => {
-              const { mobile, tablet, reduceMotion } = mediaContext.conditions as {
+              const { mobile, tablet, desktop, reduceMotion } = mediaContext.conditions as {
                 mobile: boolean;
                 tablet: boolean;
                 desktop: boolean;
@@ -99,6 +100,32 @@ export default function SkillsMotion({ children }: SkillsMotionProps) {
                 ...panels,
                 ...skillItems,
               ];
+              const pin = section.querySelector<HTMLElement>("[data-skills-pin]");
+              let activeProgressIndex = 0;
+              const progressionTween = desktop && pin
+                ? gsap.to({}, {
+                    scrollTrigger: {
+                      id: "skills-category-progression",
+                      trigger: pin,
+                      start: "top top",
+                      end: () => `+=${Math.max(window.innerHeight * 1.45, categoryControls.length * window.innerHeight * 0.52)}`,
+                      pin: true,
+                      pinSpacing: true,
+                      scrub: 0.35,
+                      anticipatePin: 1,
+                      invalidateOnRefresh: true,
+                      onUpdate: (trigger) => {
+                        const nextIndex = Math.min(
+                          categoryControls.length - 1,
+                          Math.floor(trigger.progress * categoryControls.length),
+                        );
+                        if (nextIndex === activeProgressIndex) return;
+                        activeProgressIndex = nextIndex;
+                        (categoryControls[nextIndex] as HTMLButtonElement).click();
+                      },
+                    },
+                  })
+                : undefined;
               const clearEntranceStyles = () => {
                 gsap.set(targets, {
                   clearProps: "opacity,transform,transformOrigin,willChange",
@@ -168,6 +195,8 @@ export default function SkillsMotion({ children }: SkillsMotionProps) {
 
               return () => {
                 entranceTimeline.kill();
+                progressionTween?.scrollTrigger?.kill();
+                progressionTween?.kill();
                 clearEntranceStyles();
               };
             },
@@ -222,7 +251,7 @@ export default function SkillsMotion({ children }: SkillsMotionProps) {
     <section
       ref={sectionRef}
       id="skills"
-      className="skills-section section-band"
+      className={className}
       aria-labelledby="skills-heading"
     >
       {children}

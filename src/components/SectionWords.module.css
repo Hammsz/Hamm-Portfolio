@@ -1,0 +1,83 @@
+.section {
+  position: relative;
+  inline-size: 100%;
+  overflow: clip;
+}
+
+.panel {
+  position: relative;
+  display: grid;
+  min-block-size: 88vh;
+  min-block-size: 88svh;
+  place-items: center;
+  padding-inline: var(--viewport-edge);
+  overflow: clip;
+}
+
+.panel[data-tone="purple"] {
+  background: var(--purple);
+  color: #ffffff;
+}
+
+.panel[data-tone="light"] {
+  background: var(--paper);
+  color: var(--purple-deep);
+}
+
+.sceneIndex {
+  position: absolute;
+  top: clamp(1.5rem, 3vw, 3rem);
+  left: var(--viewport-edge);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  opacity: 0.62;
+}
+
+.panel h2 {
+  margin: 0;
+  font-family: var(--type-display);
+  font-size: clamp(5rem, 13vw, 15rem);
+  font-weight: 700;
+  letter-spacing: -0.075em;
+  line-height: 0.78;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.panel :global(.statement-text) {
+  display: inline-flex;
+  max-inline-size: 100%;
+}
+
+.panel :global(.statement-char) {
+  display: inline-block;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .panel {
+    min-block-size: 76svh;
+  }
+
+  .panel h2 {
+    font-size: clamp(5.4rem, 13vw, 9rem);
+  }
+}
+
+@media (max-width: 767px) {
+  .panel {
+    min-block-size: 64svh;
+  }
+
+  .panel h2 {
+    font-size: clamp(3.4rem, 16vw, 5.4rem);
+    letter-spacing: -0.055em;
+    line-height: 0.84;
+  }
+}
+
+@media (max-width: 380px) {
+  .panel h2 {
+    font-size: clamp(3rem, 15vw, 4rem);
+  }
+}

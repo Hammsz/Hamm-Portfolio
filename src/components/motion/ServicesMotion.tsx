@@ -4,9 +4,11 @@ import { type ReactNode, useEffect, useRef } from "react";
 
 type ServicesMotionProps = {
   children: ReactNode;
+  className?: string;
+  pinClassName?: string;
 };
 
-export default function ServicesMotion({ children }: ServicesMotionProps) {
+export default function ServicesMotion({ children, className, pinClassName }: ServicesMotionProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -56,7 +58,7 @@ export default function ServicesMotion({ children }: ServicesMotionProps) {
           responsiveContext = gsap.matchMedia();
           responsiveContext.add(
             {
-              desktop: "(min-width: 768px)",
+              desktop: "(min-width: 1000px)",
               reduceMotion: "(prefers-reduced-motion: reduce)",
             },
             (mediaContext) => {
@@ -160,10 +162,10 @@ export default function ServicesMotion({ children }: ServicesMotionProps) {
     <section
       ref={sectionRef}
       id="services"
-      className="services-section section-band"
+      className={className}
       aria-labelledby="services-heading"
     >
-      <div className="services-pin" data-services-pin>
+      <div className={pinClassName} data-services-pin>
         {children}
       </div>
     </section>

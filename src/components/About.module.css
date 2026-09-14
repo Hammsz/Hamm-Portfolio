@@ -1,0 +1,258 @@
+.section {
+  position: relative;
+  min-block-size: 132svh;
+  padding-block: clamp(12rem, 24vh, 18rem) clamp(8rem, 13vw, 13rem);
+  background: var(--purple-soft);
+  color: var(--ink);
+  overflow: clip;
+}
+
+.inner {
+  inline-size: min(94vw, 112rem);
+  margin-inline: auto;
+}
+
+.heading {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: end;
+}
+
+.eyebrow {
+  grid-column: 1 / span 2;
+  margin: 0 0 0.9rem;
+  color: var(--purple-deep);
+  font-size: clamp(0.68rem, 0.65vw, 0.78rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.heading h2 {
+  grid-column: 3 / 12;
+  margin: 0;
+  font-family: var(--type-display);
+  font-size: clamp(6rem, 13.25vw, 15rem);
+  font-weight: 700;
+  letter-spacing: -0.075em;
+  line-height: 0.72;
+  text-transform: uppercase;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(1.5rem, 2.4vw, 3rem);
+  align-items: center;
+  margin-block-start: clamp(6rem, 11vw, 12rem);
+}
+
+.copy {
+  display: grid;
+  grid-column: 2 / span 6;
+  gap: clamp(1.5rem, 2.4vw, 2.5rem);
+  max-inline-size: 50rem;
+}
+
+.lead,
+.note {
+  margin: 0;
+}
+
+.lead {
+  font-size: clamp(1.2rem, 1.65vw, 1.75rem);
+  letter-spacing: -0.025em;
+  line-height: 1.48;
+}
+
+.note {
+  max-inline-size: 36rem;
+  padding-block-start: 1.1rem;
+  border-block-start: 1px solid rgb(91 33 182 / 0.3);
+  color: var(--muted);
+  font-size: clamp(0.88rem, 0.92vw, 1.02rem);
+  line-height: 1.55;
+}
+
+.cta {
+  display: flex;
+  inline-size: min(100%, 19rem);
+  min-block-size: 3.5rem;
+  align-items: center;
+  justify-content: space-between;
+  border-block-end: 1px solid var(--ink);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 180ms ease, border-color 180ms ease;
+}
+
+.cta:hover,
+.cta:focus-visible {
+  border-color: var(--purple);
+  color: var(--purple-deep);
+}
+
+.portrait {
+  position: relative;
+  grid-column: 9 / span 3;
+  inline-size: min(100%, 28rem);
+  margin: 0;
+  justify-self: end;
+}
+
+.portraitField {
+  position: relative;
+  display: grid;
+  aspect-ratio: 4 / 5.4;
+  place-items: center;
+  background: var(--dark);
+  overflow: hidden;
+}
+
+.portraitField::before,
+.portraitField::after,
+.portraitGrid {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+.portraitField::before {
+  inset: 7%;
+  border: 1px solid rgb(247 245 240 / 0.25);
+}
+
+.portraitField::after {
+  inset: 50% 0 auto;
+  border-block-start: 1px solid rgb(123 47 247 / 0.72);
+}
+
+.portraitGrid {
+  inset: 0 50% 0 auto;
+  border-inline-start: 1px solid rgb(123 47 247 / 0.72);
+}
+
+.portraitIndex {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  color: rgb(247 245 240 / 0.62);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+}
+
+.portraitMark {
+  --brand-mark-size: 82%;
+  opacity: 0.96;
+}
+
+.portraitSignature {
+  --signature-size: clamp(10rem, 14vw, 16rem);
+  position: absolute;
+  z-index: 2;
+  right: -21%;
+  bottom: 6%;
+  transform: rotate(-8deg);
+}
+
+.portrait figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block-start: 0.75rem;
+  color: var(--muted);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1199px) {
+  .section {
+    min-block-size: auto;
+    padding-block: clamp(9rem, 16vw, 12rem);
+  }
+
+  .heading h2 {
+    grid-column: 3 / -1;
+  }
+
+  .copy {
+    grid-column: 1 / span 7;
+  }
+
+  .portrait {
+    grid-column: 9 / -1;
+  }
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding-block: clamp(7rem, 22vw, 9rem) clamp(6rem, 18vw, 8rem);
+  }
+
+  .inner {
+    inline-size: calc(100% - 2 * var(--viewport-edge));
+  }
+
+  .heading {
+    display: block;
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin-block-end: 1.4rem;
+  }
+
+  .heading h2 {
+    font-size: clamp(4.6rem, 24vw, 7rem);
+    letter-spacing: -0.065em;
+    line-height: 0.78;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3rem, 11vw, 4.5rem);
+    margin-block-start: clamp(4rem, 14vw, 6rem);
+  }
+
+  .portrait {
+    order: -1;
+    inline-size: min(72vw, 20rem);
+    align-self: center;
+  }
+
+  .portraitSignature {
+    --signature-size: clamp(8rem, 35vw, 11rem);
+    right: -16%;
+  }
+
+  .copy {
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .lead {
+    font-size: clamp(1.05rem, 4.7vw, 1.3rem);
+    line-height: 1.5;
+  }
+
+  .note {
+    margin-inline: auto;
+    font-size: 0.9rem;
+  }
+
+  .cta {
+    margin-inline: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta {
+    transition: none;
+  }
+}

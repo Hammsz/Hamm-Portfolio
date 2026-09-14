@@ -1,43 +1,69 @@
-﻿import { portfolioData } from "@/data/portfolio";
-import SocialLinks from "@/components/ui/SocialLinks";
+import BrandMark from "@/components/brand/BrandMark";
+import Signature from "@/components/brand/Signature";
+import FooterMotion from "@/components/motion/FooterMotion";
+import SocialIconRail from "@/components/ui/SocialIconRail";
+import { portfolioData } from "@/data/portfolio";
+import styles from "./Footer.module.css";
 
 export default function Footer() {
-  const { brandName, fullName, person, socialLinks } = portfolioData;
+  const { brandName, person, socialLinks } = portfolioData;
 
   return (
-    <footer id="contact" className="contact-section" aria-labelledby="contact-heading">
-      <div className="section-shell contact-shell">
-        <div className="contact-grid">
-          <div className="contact-copy">
-            <p className="eyebrow">Contact</p>
-            <h2 id="contact-heading"><span>Say Hello!</span></h2>
-            <p>
-              Static contact structure for {fullName}. Add verified contact details and a real submission flow in a later approved phase.
-            </p>
-            <address>
-              <span>{person.emailLabel}</span>
-              <span>{person.location}</span>
-            </address>
+    <FooterMotion className={styles.footer}>
+      <h2 id="contact-heading" className={styles.title} data-footer-title>
+        Say Hello!
+      </h2>
+
+      <div className={styles.message}>
+        <p data-footer-message>Let&apos;s build something great together!</p>
+        <form className={styles.form} data-footer-form aria-label="Contact email placeholder">
+          <label className={styles.srOnly} htmlFor="contact-email">Email address</label>
+          <input
+            id="contact-email"
+            name="email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            placeholder="Enter your email"
+            data-footer-input
+          />
+          <button type="button" aria-disabled="true" aria-describedby="contact-form-status" data-footer-submit>
+            Send
+          </button>
+          <span id="contact-form-status" className={styles.srOnly}>
+            Contact submission is pending a verified endpoint.
+          </span>
+        </form>
+      </div>
+
+      <div className={styles.contactRow} data-footer-contact-row>
+        <SocialIconRail
+          links={socialLinks}
+          className={styles.socials}
+          label="Social profiles"
+        />
+        <address className={styles.contactMeta} data-footer-contact-meta>
+          <span>{person.emailLabel}</span>
+          <span>{person.location}</span>
+        </address>
+      </div>
+
+      <div className={styles.identity} data-footer-identity>
+        <div className={styles.copyright} data-footer-copyright>
+          <div>
+            <BrandMark className={styles.copyrightMark} decorative />
+            <p>© {brandName} | 2026</p>
           </div>
-          <form className="contact-form" aria-label="Static contact form placeholder">
-            <label htmlFor="contact-name">Name</label>
-            <input id="contact-name" name="name" type="text" placeholder="Your name" />
-            <label htmlFor="contact-message">Message</label>
-            <textarea id="contact-message" name="message" rows={5} placeholder="Write a short message" />
-            <button type="button">Submission pending</button>
-          </form>
+          <p>designed &amp; developed by me</p>
         </div>
-        <nav className="footer-socials" aria-label="Social profile placeholders">
-          <SocialLinks links={socialLinks} />
-        </nav>
-        <div className="closing-name-track" aria-hidden="true">
-          <span>{brandName}</span>
-        </div>
-        <div className="footer-bottom">
-          <p>Copyright 2026 {fullName}. Static portfolio draft.</p>
-          <p>No external form, audio, API, or tracking in Phase 1.7.</p>
+
+        <div className={styles.nameMask} data-footer-mask>
+          <div className={styles.wordmark} data-footer-wordmark>{brandName}</div>
+          <span className={styles.signatureAnchor} data-footer-signature>
+            <Signature className={styles.signature} decorative />
+          </span>
         </div>
       </div>
-    </footer>
+    </FooterMotion>
   );
 }
