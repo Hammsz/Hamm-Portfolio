@@ -1,8 +1,8 @@
 .section {
   position: relative;
   inline-size: 100%;
-  background: var(--paper);
-  color: var(--ink);
+  background: transparent;
+  color: inherit;
   overflow: clip;
 }
 
@@ -296,11 +296,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .section {
-    background: var(--dark);
-    color: #f5f5f5;
-  }
-
   .intro {
     opacity: 1;
     transition: none;

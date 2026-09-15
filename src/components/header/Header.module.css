@@ -40,7 +40,11 @@
 }
 
 .rightSlot {
+  position: absolute;
+  top: calc(var(--safe-top) + 2rem);
+  right: max(1.5rem, var(--safe-right));
   justify-content: flex-end;
+  transform: translateY(-50%);
 }
 
 .menuTrigger,
@@ -84,24 +88,28 @@
 }
 
 .signatureLink {
+  position: absolute;
+  top: calc(var(--safe-top) + 2rem);
+  left: 50%;
   display: inline-flex;
   min-block-size: 2.75rem;
   align-items: center;
   justify-content: center;
   color: inherit;
   text-decoration: none;
+  transform: translate(-50%, -50%);
   user-select: none;
   -webkit-user-select: none;
   -webkit-user-drag: none;
 }
 
 .signatureLink :global(.header-signature) {
-  --signature-size: clamp(4.75rem, 5.3vw, 6.15rem);
+  --signature-size: 8.625rem;
 }
 
 .signatureLink :global(.header-signature) img {
   filter: none;
-  transform: translateY(-0.3rem);
+  transform: none;
 }
 
 .clock {
@@ -120,6 +128,14 @@
 .header[data-menu-open="true"] .bar {
   opacity: 1;
   transform: none;
+}
+
+:global(html[data-loader="pending"]) .header,
+:global(html[data-loader="active"]) .header,
+:global(html[data-loader="mosaic"]) .header,
+:global(html[data-loader="handoff"]) .header {
+  visibility: hidden;
+  opacity: 0;
 }
 
 .header[data-surface="dark"] .bar {
@@ -351,7 +367,7 @@
 
 @media (max-width: 1023px) {
   .signatureLink :global(.header-signature) {
-    --signature-size: clamp(4.5rem, 7vw, 5rem);
+    --signature-size: 2.5rem;
   }
 
   .menuNavigation ol {
@@ -373,11 +389,11 @@
   }
 
   .signatureLink :global(.header-signature) {
-    --signature-size: clamp(4.25rem, 18vw, 4.8rem);
+    --signature-size: 5.3rem;
   }
 
   .signatureLink :global(.header-signature) img {
-    transform: translateY(-0.24rem);
+    transform: none;
   }
 
   .clock {
@@ -430,6 +446,10 @@
 }
 
 @media (max-width: 430px) {
+  .signatureLink :global(.header-signature) {
+    --signature-size: 6.1rem;
+  }
+
   .menuMeta p:last-child,
   .menuFooter p:last-child {
     text-align: end;

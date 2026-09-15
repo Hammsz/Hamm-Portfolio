@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { gsap } from "gsap";
 import Clock from "@/components/Clock";
 import type { BrandTone } from "@/components/brand/BrandMark";
 import type { NavigationItem } from "@/data/portfolio";
@@ -66,6 +67,7 @@ export default function HeaderInteractions({
   const overlayRef = useRef<HTMLDivElement>(null);
   const pendingTargetRef = useRef<`#${string}` | undefined>(undefined);
   const restoreFocusRef = useRef(false);
+  const signatureLinkRef = useRef<HTMLAnchorElement>(null);
 
   const finishClose = useCallback(() => {
     window.clearTimeout(closeTimerRef.current);
@@ -159,8 +161,51 @@ export default function HeaderInteractions({
   }, [isMenuMounted]);
 
   useEffect(() => {
+    const signatureLink = signatureLinkRef.current;
+    if (!signatureLink) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let disposed = false;
+    let isAnimating = false;
+    let cooldownTimer = 0;
+    let activeTween: gsap.core.Tween | undefined;
+
+    const replaySignature = () => {
+      if (reduceMotion.matches || isAnimating) return;
+      isAnimating = true;
+
+      if (disposed) return;
+      activeTween?.kill();
+      activeTween = gsap.fromTo(
+        signatureLink,
+        { clipPath: "inset(0 100% 0 0)", opacity: 0.35 },
+        {
+          clipPath: "inset(0 0% 0 0)",
+          opacity: 1,
+          duration: 0.6,
+          ease: "power2.out",
+          onComplete: () => {
+            cooldownTimer = window.setTimeout(() => {
+              isAnimating = false;
+            }, 200);
+          },
+        },
+      );
+    };
+
+    signatureLink.addEventListener("pointerenter", replaySignature);
+    return () => {
+      disposed = true;
+      signatureLink.removeEventListener("pointerenter", replaySignature);
+      window.clearTimeout(cooldownTimer);
+      activeTween?.kill();
+    };
+  }, []);
+
+  useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
+    const root = document.documentElement;
 
     if (isMenuMounted) {
       header.dataset.scrollHidden = "false";
@@ -185,7 +230,14 @@ export default function HeaderInteractions({
 
       if (!surface) return;
 
-      const channels = getComputedStyle(surface).backgroundColor.match(/[\d.]+/g);
+      const surfaceBackground = getComputedStyle(surface).backgroundColor;
+      const surfaceChannels = surfaceBackground.match(/[\d.]+/g);
+      const surfaceAlpha = surfaceChannels?.[3] === undefined ? 1 : Number(surfaceChannels[3]);
+      if (!surfaceChannels || surfaceAlpha <= 0.01) {
+        header.dataset.surface = root.dataset.pageTheme === "dark" ? "dark" : "light";
+        return;
+      }
+      const channels = surfaceBackground.match(/[\d.]+/g);
       if (!channels || channels.length < 3) return;
 
       const [red, green, blue] = channels.slice(0, 3).map(Number);
@@ -217,10 +269,12 @@ export default function HeaderInteractions({
     syncSurfaceTone();
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll);
+    window.addEventListener("page-theme-change", syncSurfaceTone);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
+      window.removeEventListener("page-theme-change", syncSurfaceTone);
       window.cancelAnimationFrame(frame);
     };
   }, [isMenuMounted]);
@@ -276,6 +330,7 @@ export default function HeaderInteractions({
           className={styles.signatureLink}
           draggable={false}
           href="#home"
+          ref={signatureLinkRef}
           onClick={(event) => {
             event.preventDefault();
             scrollToSection("#home");

@@ -76,6 +76,12 @@
   transform: translateX(50%);
   color: var(--ink);
   line-height: 0;
+  overflow: clip;
+}
+
+.hero[data-hero-text-state="pending"] .microcopy,
+.hero[data-hero-text-state="pending"] .wordmark {
+  visibility: hidden;
 }
 
 .wordmarkText {

@@ -44,6 +44,11 @@ html {
   scrollbar-color: var(--purple) transparent;
   scrollbar-gutter: stable;
   scrollbar-width: thin;
+  transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html[data-page-theme="dark"] {
+  background: var(--dark);
 }
 
 html[data-menu-open="true"] {
@@ -53,7 +58,8 @@ html[data-menu-open="true"] {
 html[data-loader="pending"],
 html[data-loader="active"],
 html[data-loader="complete"],
-html[data-loader="mosaic"] {
+html[data-loader="mosaic"],
+html[data-loader="handoff"] {
   overflow: hidden;
 }
 
@@ -66,6 +72,14 @@ body {
   font-family: var(--type-support);
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
+  transition:
+    background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.works-active {
+  background: var(--dark);
+  color: var(--paper);
 }
 
 section,
@@ -1009,5 +1023,12 @@ textarea:focus-visible {
 
   .statement-panel h2 {
     font-size: clamp(2.9rem, 15vw, 4.2rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body {
+    transition-duration: 1ms;
   }
 }

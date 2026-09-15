@@ -1,6 +1,10 @@
 "use client";
 
 import { type ReactNode, useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { SplitText } from "gsap/SplitText";
+
+gsap.registerPlugin(SplitText);
 
 const LOADING_GUARD_TIMEOUT_MS = 5000;
 const READY_LOADER_STATES = new Set(["handoff", "done", "fallback", "reduced"]);
@@ -28,6 +32,10 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
     let responsiveContext: gsap.MatchMedia | undefined;
     root.dataset.heroMotionMounted = "true";
 
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    section.dataset.heroTextState =
+      !reduceMotion && !entrancePlayed && window.scrollY <= 8 ? "pending" : "ready";
+
     const loaderIsReady = () => {
       const loaderState = root.dataset.loader;
       return !loaderState || READY_LOADER_STATES.has(loaderState);
@@ -50,6 +58,7 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
         if (disposed || root.dataset.motion !== "loading") return;
 
         entrancePlayed = true;
+        section.dataset.heroTextState = "ready";
         root.dataset.heroMotionFallback = "visible";
       }, LOADING_GUARD_TIMEOUT_MS);
     };
@@ -74,8 +83,6 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
       const currentSetupVersion = setupVersion;
 
       try {
-        const { gsap } = await import("gsap");
-
         if (
           disposed ||
           currentSetupVersion !== setupVersion ||
@@ -89,6 +96,7 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
           responsiveContext = gsap.matchMedia();
           responsiveContext.add(
             {
+              desktop: "(min-width: 768px)",
               mobile: "(max-width: 767px)",
               reduceMotion: "(prefers-reduced-motion: reduce)",
             },
@@ -103,10 +111,25 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
               const microcopy = section.querySelector<HTMLElement>('[data-hero="microcopy"]');
               const microcopyItems = section.querySelectorAll<HTMLElement>('[data-hero="microcopy-item"]');
               const wordmark = section.querySelector<HTMLElement>('[data-hero="wordmark"]');
+              const wordmarkTexts = Array.from(
+                section.querySelectorAll<HTMLElement>('[data-brand-wordmark="giant"]'),
+              );
               const socials = section.querySelector<HTMLElement>('[data-hero="socials"]');
               const socialLines = section.querySelectorAll<HTMLElement>("[data-social-rail-line]");
               const socialItems = section.querySelectorAll<HTMLElement>('[data-hero="socials"] li');
-              if (!microcopy || !wordmark || !socials) return;
+              const visibleWordmark = wordmarkTexts.find(
+                (element) => element.getClientRects().length > 0,
+              );
+              if (
+                !microcopy ||
+                microcopyItems.length < 2 ||
+                !wordmark ||
+                !visibleWordmark ||
+                !socials
+              ) {
+                section.dataset.heroTextState = "ready";
+                return;
+              }
 
               const entranceTargets = [microcopy, wordmark, socials];
               let scrollTimeline: gsap.core.Timeline | undefined;
@@ -132,6 +155,7 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
 
               if (entrancePlayed || window.scrollY > 8) {
                 entrancePlayed = true;
+                section.dataset.heroTextState = "ready";
                 createScrollResponse();
                 return () => scrollTimeline?.kill();
               }
@@ -139,15 +163,33 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
               entrancePlayed = true;
               gsap.set(entranceTargets, { willChange: "transform, opacity" });
 
-              const entranceTimeline = gsap
+              const wordmarkSplit = new SplitText(visibleWordmark, { type: "chars" });
+              const jobSplit = new SplitText(microcopyItems[0], { type: "chars" });
+              const messageSplit = new SplitText(microcopyItems[1], { type: "chars" });
+              const wordmarkChars = wordmarkSplit.chars as HTMLElement[];
+              const firstWordLength =
+                visibleWordmark.textContent?.trim().split(/\s+/)[0]?.length ??
+                wordmarkChars.length;
+              const firstNameChars = wordmarkChars.slice(0, firstWordLength);
+              const lastNameChars = wordmarkChars.slice(firstWordLength);
+              const textCharacters = [
+                ...wordmarkChars,
+                ...(jobSplit.chars as HTMLElement[]),
+                ...(messageSplit.chars as HTMLElement[]),
+              ];
+
+              gsap.set(textCharacters, {
+                opacity: 0,
+                yPercent: 120,
+                rotationX: -90,
+                transformOrigin: "50% 100%",
+              });
+              section.dataset.heroTextState = "animating";
+
+              const socialTimeline = gsap
                 .timeline({
                   defaults: { ease: "power3.out" },
-                  onComplete: () => {
-                    gsap.set(entranceTargets, { clearProps: "willChange" });
-                    createScrollResponse();
-                  },
                 })
-                .from(microcopyItems, { opacity: 0, y: 12, duration: 0.58, stagger: 0.08 }, 0.16)
                 .from(
                   socialLines,
                   {
@@ -169,23 +211,77 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
                     stagger: 0.06,
                   },
                   0.26,
-                )
-                .from(
-                  wordmark,
-                  {
-                    opacity: 0,
-                    yPercent: mobile ? 14 : 20,
-                    scale: mobile ? 0.985 : 0.97,
-                    transformOrigin: "50% 100%",
-                    duration: 1,
-                    ease: "power4.out",
-                  },
-                  0.3,
                 );
 
+              const loaderDelay = root.dataset.loader === "handoff" ? 1.6 : 0.6;
+              const textTimeline = gsap.timeline({
+                delay: loaderDelay,
+                onComplete: () => {
+                  section.dataset.heroTextState = "ready";
+                  gsap.set(entranceTargets, { clearProps: "willChange" });
+                  createScrollResponse();
+                },
+              });
+
+              textTimeline.to(firstNameChars, {
+                opacity: 1,
+                yPercent: 0,
+                rotationX: 0,
+                duration: 1.2,
+                stagger: 0.04,
+                ease: "expo.out",
+              });
+
+              if (lastNameChars.length > 0) {
+                textTimeline.to(
+                  lastNameChars,
+                  {
+                    opacity: 1,
+                    yPercent: 0,
+                    rotationX: 0,
+                    duration: 1.2,
+                    stagger: 0.04,
+                    ease: "expo.out",
+                  },
+                  "-=0.8",
+                );
+              } else {
+                textTimeline.to({}, { duration: 1.36 }, "-=0.8");
+              }
+
+              textTimeline.to(
+                jobSplit.chars,
+                {
+                  opacity: 1,
+                  yPercent: 0,
+                  rotationX: 0,
+                  duration: 1,
+                  stagger: 0.02,
+                  ease: "power3.out",
+                },
+                "-=0.9",
+              );
+              textTimeline.to(
+                messageSplit.chars,
+                {
+                  opacity: 1,
+                  yPercent: 0,
+                  rotationX: 0,
+                  duration: 1,
+                  stagger: 0.02,
+                  ease: "power3.out",
+                },
+                "-=0.8",
+              );
+
               return () => {
-                entranceTimeline.kill();
+                socialTimeline.kill();
+                textTimeline.kill();
                 scrollTimeline?.kill();
+                wordmarkSplit.revert();
+                jobSplit.revert();
+                messageSplit.revert();
+                section.dataset.heroTextState = "ready";
                 gsap.set(entranceTargets, { clearProps: "willChange" });
               };
             },
@@ -195,6 +291,7 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
       } catch (error) {
         if (!disposed && currentSetupVersion === setupVersion) {
           entrancePlayed = true;
+          section.dataset.heroTextState = "ready";
           root.dataset.heroMotionFallback = "visible";
           console.error("Hero motion failed to initialize; static hero content remains available.", error);
         }
@@ -220,10 +317,6 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
       }
 
       if (root.dataset.motion === "loading") {
-        if (root.dataset.loader === "handoff" || root.dataset.loader === "done") {
-          entrancePlayed = true;
-          root.dataset.heroMotionFallback = "visible";
-        }
         teardownAnimation();
         armLoadingGuard();
         return;
@@ -232,6 +325,7 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
       clearLoadingGuard();
       if (root.dataset.motion === "reduced" || root.dataset.motion === "native") {
         entrancePlayed = true;
+        section.dataset.heroTextState = "ready";
       }
       teardownAnimation();
     };
@@ -249,6 +343,7 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
       clearLoadingGuard();
       teardownAnimation();
       delete root.dataset.heroMotionMounted;
+      delete section.dataset.heroTextState;
     };
   }, []);
 

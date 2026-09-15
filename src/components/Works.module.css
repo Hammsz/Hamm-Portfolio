@@ -1,8 +1,8 @@
 .section {
   position: relative;
   padding-block: 0 clamp(9rem, 14vw, 15rem);
-  background: var(--dark);
-  color: var(--paper);
+  background: transparent;
+  color: inherit;
   overflow: clip;
 }
 

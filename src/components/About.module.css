@@ -4,8 +4,8 @@
   min-block-size: 100svh;
   margin-block-start: 40vh;
   margin-block-start: 40svh;
-  background: var(--paper);
-  color: var(--ink);
+  background: transparent;
+  color: inherit;
   overflow: clip;
 }
 

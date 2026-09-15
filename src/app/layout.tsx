@@ -29,7 +29,7 @@ const HERO_MOTION_BOOTSTRAP = `
         root.dataset.loader = "fallback";
         root.dataset.heroMotionFallback = "visible";
       }
-    }, 2450);
+    }, 5500);
   })();
 `;
 
