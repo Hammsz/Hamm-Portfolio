@@ -132,19 +132,25 @@ export default function WorksMotion({ children, className }: WorksMotionProps) {
 
               cards.forEach((card, index) => {
                 const visual = card.querySelector<HTMLElement>('[data-works="visual"]');
+                const secondaryVisual = card.querySelector<HTMLElement>(
+                  "[data-works-secondary]",
+                );
                 const copy = card.querySelector<HTMLElement>('[data-works="copy"]');
                 const copyItems = card.querySelectorAll<HTMLElement>(
                   "[data-works-copy-item]",
                 );
-                const mediaPlane = card.querySelector<HTMLElement>(
+                const mediaPlanes = card.querySelectorAll<HTMLElement>(
                   "[data-project-media-plane]",
                 );
 
                 if (!visual || !copy || !copyItems.length) return;
 
                 const copyTargets = [...copyItems];
+                const visualTargets = [visual, secondaryVisual].filter(
+                  (target): target is HTMLElement => Boolean(target),
+                );
                 const clearVisualStyles = () => {
-                  gsap.set(visual, {
+                  gsap.set(visualTargets, {
                     clearProps: "opacity,transform,transformOrigin,clipPath,willChange",
                   });
                 };
@@ -174,7 +180,7 @@ export default function WorksMotion({ children, className }: WorksMotionProps) {
                       },
                       onComplete: clearVisualStyles,
                     })
-                    .from(visual, {
+                    .from(visualTargets, {
                       opacity: 0,
                       y: mobile ? 44 : tablet ? 54 : 72,
                       scale: mobile ? 0.97 : tablet ? 0.96 : 0.94,
@@ -185,6 +191,7 @@ export default function WorksMotion({ children, className }: WorksMotionProps) {
                           : "inset(14% 0 86% 0)",
                       transformOrigin: "50% 100%",
                       duration: mobile ? 0.78 : tablet ? 0.9 : 1.05,
+                      stagger: desktop ? 0.1 : 0,
                     });
 
                   visualTimelines.push(visualTimeline);
@@ -220,16 +227,16 @@ export default function WorksMotion({ children, className }: WorksMotionProps) {
                   copyTimelines.push(copyTimeline);
                 }
 
-                if (desktop && mediaPlane) {
+                if (desktop && mediaPlanes.length) {
                   const parallaxTween = gsap.fromTo(
-                    mediaPlane,
-                    { yPercent: -3 },
+                    mediaPlanes,
+                    { yPercent: (planeIndex) => (planeIndex === 0 ? -3 : -2) },
                     {
-                      yPercent: 3,
+                      yPercent: (planeIndex) => (planeIndex === 0 ? 3 : 2),
                       ease: "none",
                       scrollTrigger: {
                         id: `works-media-parallax-${index + 1}`,
-                        trigger: visual,
+                        trigger: card,
                         start: "top bottom",
                         end: "bottom top",
                         scrub: 0.45,
@@ -250,12 +257,19 @@ export default function WorksMotion({ children, className }: WorksMotionProps) {
 
                 cards.forEach((card) => {
                   const visual = card.querySelector<HTMLElement>('[data-works="visual"]');
+                  const secondaryVisual = card.querySelector<HTMLElement>(
+                    "[data-works-secondary]",
+                  );
                   const copyTargets = card.querySelectorAll<HTMLElement>(
                     "[data-works-copy-item]",
                   );
 
-                  if (visual) {
-                    gsap.set(visual, {
+                  const visualTargets = [visual, secondaryVisual].filter(
+                    (target): target is HTMLElement => Boolean(target),
+                  );
+
+                  if (visualTargets.length) {
+                    gsap.set(visualTargets, {
                       clearProps: "opacity,transform,transformOrigin,clipPath,willChange",
                     });
                   }

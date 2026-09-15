@@ -19,6 +19,7 @@ export default function Services() {
           data-lenis-prevent-horizontal
           aria-label="Draft service list"
         >
+          <span className={styles.progress} data-services-progress aria-hidden="true" />
           <div className={styles.track} data-services-track>
             {portfolioData.services.map((service, index) => (
               <article className={styles.card} data-services-card key={service.number}>

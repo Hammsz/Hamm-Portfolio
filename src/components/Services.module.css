@@ -1,7 +1,7 @@
 .section {
   position: relative;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--dark);
+  color: var(--paper);
   overflow: clip;
 }
 
@@ -17,12 +17,12 @@
 
 .heading {
   display: grid;
-  grid-template-columns: minmax(8rem, 0.22fr) minmax(0, 0.62fr) minmax(14rem, 0.3fr);
+  grid-template-columns: 6rem minmax(0, 42rem) minmax(0, 1fr);
   gap: clamp(1.5rem, 4vw, 5rem);
-  align-items: end;
-  inline-size: min(94vw, 112rem);
-  margin-inline: auto;
-  margin-block-end: clamp(3rem, 6vh, 5rem);
+  align-items: start;
+  inline-size: 100%;
+  margin-block-end: 3rem;
+  padding-inline: clamp(1.5rem, 6.7vw, 6rem);
 }
 
 .eyebrow,
@@ -34,7 +34,7 @@
 
 .eyebrow,
 .number {
-  color: var(--purple-deep);
+  color: #cbb6ff;
   font-size: clamp(0.68rem, 0.64vw, 0.76rem);
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -42,21 +42,24 @@
 }
 
 .heading h2 {
+  max-inline-size: 32rem;
   margin: 0;
-  font-family: var(--type-display);
-  font-size: clamp(3.6rem, 6vw, 7.25rem);
-  font-weight: 700;
-  letter-spacing: -0.065em;
-  line-height: 0.84;
+  font-family: var(--type-support);
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.42;
 }
 
 .intro {
-  color: var(--muted);
+  max-inline-size: 27rem;
+  color: #aaa2af;
   font-size: clamp(0.88rem, 0.9vw, 1.02rem);
   line-height: 1.55;
 }
 
 .viewport {
+  position: relative;
   inline-size: 100%;
   min-inline-size: 0;
   max-inline-size: 100%;
@@ -65,27 +68,39 @@
   overscroll-behavior-x: contain;
 }
 
+.progress {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  left: 0;
+  block-size: 2px;
+  background: var(--purple);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
 .track {
   display: flex;
   inline-size: max-content;
-  padding-inline: max(var(--viewport-edge), var(--safe-left)) max(var(--viewport-edge), var(--safe-right));
+  padding-inline: clamp(1.5rem, 6.7vw, 6rem);
 }
 
 .card {
   display: flex;
-  inline-size: clamp(27rem, 31vw, 31rem);
-  min-block-size: clamp(27rem, 67vh, 31rem);
+  inline-size: 30rem;
+  min-block-size: 30rem;
   flex: 0 0 auto;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid rgb(23 21 26 / 0.3);
+  border: 1px solid rgb(247 245 240 / 0.32);
   border-inline-end: 0;
-  padding: clamp(1.25rem, 1.8vw, 2rem);
-  background: var(--paper);
+  padding: 1.3rem;
+  background: transparent;
 }
 
 .card:last-child {
-  border-inline-end: 1px solid rgb(23 21 26 / 0.3);
+  border-inline-end: 1px solid rgb(247 245 240 / 0.32);
 }
 
 .cardTop {
@@ -97,9 +112,9 @@
 .symbol {
   position: relative;
   display: block;
-  inline-size: clamp(5rem, 7vw, 7.25rem);
+  inline-size: 6.25rem;
   aspect-ratio: 1;
-  border: 1px solid rgb(123 47 247 / 0.48);
+  border: 1px solid rgb(123 47 247 / 0.82);
   border-radius: 50%;
 }
 
@@ -150,21 +165,21 @@
 }
 
 .cardCopy h3 {
-  max-inline-size: 12ch;
-  margin: 0 0 1.25rem;
+  max-inline-size: 15ch;
+  margin: 0 0 1.5rem;
   font-family: var(--type-display);
-  font-size: clamp(2rem, 2.55vw, 2.8rem);
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
   font-weight: 700;
-  letter-spacing: -0.05em;
-  line-height: 0.94;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
 }
 
 .cardCopy p {
-  max-inline-size: 33rem;
+  max-inline-size: 28rem;
   padding-block-start: 1rem;
-  border-block-start: 1px solid rgb(23 21 26 / 0.2);
-  color: var(--muted);
-  font-size: clamp(0.9rem, 0.88vw, 1rem);
+  border-block-start: 1px solid rgb(247 245 240 / 0.3);
+  color: #aaa2af;
+  font-size: clamp(0.94rem, 1vw, 1.05rem);
   line-height: 1.55;
 }
 
@@ -182,10 +197,18 @@
   }
 }
 
+@media (min-width: 1000px) and (max-width: 1199px) {
+  .heading {
+    grid-template-columns: 5rem minmax(0, 1fr) minmax(14rem, 0.58fr);
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    padding-inline: 4rem;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 999px) {
   .track {
     display: grid;
-    inline-size: min(94vw, 70rem);
+    inline-size: calc(100% - 4rem);
     grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-inline: auto;
     padding-inline: 0;
@@ -194,50 +217,61 @@
   .card {
     inline-size: auto;
     min-block-size: 25rem;
-    border-inline-end: 1px solid rgb(23 21 26 / 0.3);
+    border-inline-end: 1px solid rgb(247 245 240 / 0.32);
   }
 
   .heading {
-    grid-template-columns: minmax(7rem, 0.25fr) minmax(0, 0.75fr);
+    grid-template-columns: 5rem minmax(0, 1fr);
+    padding-inline: 2rem;
   }
 
   .intro {
     grid-column: 2;
   }
+
+  .progress {
+    display: none;
+  }
 }
 
 @media (max-width: 767px) {
   .pin {
-    padding-block: clamp(6rem, 18vw, 8rem);
+    padding-block: clamp(5rem, 18vw, 7rem);
   }
 
   .heading {
     display: block;
-    inline-size: calc(100% - 2 * var(--viewport-edge));
-    margin-block-end: 3rem;
+    margin-block-end: 2rem;
+    padding-inline: var(--viewport-edge);
   }
 
   .eyebrow {
-    margin-block-end: 1.25rem;
+    margin-block-end: 1rem;
   }
 
   .heading h2 {
-    max-inline-size: 9ch;
-    font-size: clamp(3.35rem, 15vw, 4.75rem);
+    max-inline-size: 17rem;
+    font-size: 1.45rem;
+    line-height: 1.4;
   }
 
   .intro {
-    max-inline-size: 29rem;
-    margin-block-start: 1.5rem;
+    max-inline-size: 19rem;
+    margin-block-start: 0.75rem;
   }
 
   .viewport {
     overflow: visible;
   }
 
+  .progress {
+    display: none;
+  }
+
   .track {
     display: grid;
     inline-size: calc(100% - 2 * var(--viewport-edge));
+    gap: 0.625rem;
     margin-inline: auto;
     padding: 0;
   }
@@ -245,17 +279,20 @@
   .card,
   .card:last-child {
     inline-size: auto;
-    min-block-size: clamp(20rem, 88vw, 23rem);
-    border-inline-end: 1px solid rgb(23 21 26 / 0.3);
-    border-block-end: 0;
-    padding: 1.25rem;
-  }
-
-  .card:last-child {
-    border-block-end: 1px solid rgb(23 21 26 / 0.3);
+    min-block-size: 20.95rem;
+    border-inline-end: 1px solid rgb(247 245 240 / 0.32);
+    padding: 1.1rem;
   }
 
   .symbol {
-    inline-size: clamp(4.5rem, 21vw, 5.75rem);
+    inline-size: 4.7rem;
+  }
+
+  .cardCopy h3 {
+    font-size: 1.25rem;
+  }
+
+  .cardCopy p {
+    font-size: 0.95rem;
   }
 }

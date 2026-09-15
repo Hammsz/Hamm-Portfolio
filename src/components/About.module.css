@@ -1,57 +1,64 @@
 .section {
   position: relative;
-  min-block-size: 132svh;
-  padding-block: clamp(12rem, 24vh, 18rem) clamp(8rem, 13vw, 13rem);
-  background: var(--purple-soft);
+  min-block-size: 100vh;
+  min-block-size: 100svh;
+  margin-block-start: 40vh;
+  margin-block-start: 40svh;
+  padding-block-end: clamp(7rem, 10vw, 10rem);
+  background: var(--paper);
   color: var(--ink);
   overflow: clip;
 }
 
 .inner {
-  inline-size: min(94vw, 112rem);
+  inline-size: 100%;
   margin-inline: auto;
 }
 
 .heading {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  align-items: end;
+  position: relative;
+  padding-inline: clamp(2rem, 8.9vw, 8rem);
 }
 
 .eyebrow {
-  grid-column: 1 / span 2;
-  margin: 0 0 0.9rem;
+  position: absolute;
+  top: 50%;
+  left: clamp(2rem, 8.9vw, 8rem);
+  margin: 0;
   color: var(--purple-deep);
   font-size: clamp(0.68rem, 0.65vw, 0.78rem);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  transform: translateY(-50%);
 }
 
 .heading h2 {
-  grid-column: 3 / 12;
   margin: 0;
   font-family: var(--type-display);
-  font-size: clamp(6rem, 13.25vw, 15rem);
+  font-size: clamp(3rem, 5vw, 8rem);
   font-weight: 700;
-  letter-spacing: -0.075em;
-  line-height: 0.72;
+  letter-spacing: -0.055em;
+  line-height: 0.84;
+  text-align: center;
   text-transform: uppercase;
 }
 
 .layout {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: clamp(1.5rem, 2.4vw, 3rem);
-  align-items: center;
-  margin-block-start: clamp(6rem, 11vw, 12rem);
+  grid-template-columns: minmax(0, 1fr) 22vw;
+  gap: clamp(3rem, 5vw, 6rem);
+  align-items: start;
+  margin-block-start: 1.3rem;
+  padding-inline: clamp(2rem, 8.9vw, 8rem);
+  transform: translateY(-2.5rem);
 }
 
 .copy {
   display: grid;
-  grid-column: 2 / span 6;
-  gap: clamp(1.5rem, 2.4vw, 2.5rem);
+  gap: 1.5rem;
   max-inline-size: 50rem;
+  margin-block-start: 2.5rem;
 }
 
 .lead,
@@ -60,14 +67,14 @@
 }
 
 .lead {
-  font-size: clamp(1.2rem, 1.65vw, 1.75rem);
-  letter-spacing: -0.025em;
-  line-height: 1.48;
+  font-size: clamp(1rem, 1.45vw, 1.3rem);
+  letter-spacing: -0.015em;
+  line-height: 1.5;
 }
 
 .note {
   max-inline-size: 36rem;
-  padding-block-start: 1.1rem;
+  padding-block-start: 1rem;
   border-block-start: 1px solid rgb(91 33 182 / 0.3);
   color: var(--muted);
   font-size: clamp(0.88rem, 0.92vw, 1.02rem);
@@ -98,8 +105,7 @@
 
 .portrait {
   position: relative;
-  grid-column: 9 / span 3;
-  inline-size: min(100%, 28rem);
+  inline-size: 22vw;
   margin: 0;
   justify-self: end;
 }
@@ -107,7 +113,9 @@
 .portraitField {
   position: relative;
   display: grid;
-  aspect-ratio: 4 / 5.4;
+  inline-size: 100%;
+  block-size: 55vh;
+  block-size: 55svh;
   place-items: center;
   background: var(--dark);
   overflow: hidden;
@@ -151,12 +159,12 @@
 }
 
 .portraitSignature {
-  --signature-size: clamp(10rem, 14vw, 16rem);
+  --signature-size: clamp(8rem, 11vw, 12rem);
   position: absolute;
   z-index: 2;
-  right: -21%;
-  bottom: 6%;
-  transform: rotate(-8deg);
+  top: 0.8rem;
+  left: -8%;
+  transform: rotate(-12deg);
 }
 
 .portrait figcaption {
@@ -170,84 +178,84 @@
   text-transform: uppercase;
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 1000px) {
   .section {
     min-block-size: auto;
-    padding-block: clamp(9rem, 16vw, 12rem);
-  }
-
-  .heading h2 {
-    grid-column: 3 / -1;
-  }
-
-  .copy {
-    grid-column: 1 / span 7;
-  }
-
-  .portrait {
-    grid-column: 9 / -1;
-  }
-}
-
-@media (max-width: 767px) {
-  .section {
-    padding-block: clamp(7rem, 22vw, 9rem) clamp(6rem, 18vw, 8rem);
-  }
-
-  .inner {
-    inline-size: calc(100% - 2 * var(--viewport-edge));
+    margin-block-start: 0;
+    padding-block: clamp(4rem, 12vw, 7rem) clamp(6rem, 18vw, 8rem);
   }
 
   .heading {
-    display: block;
+    padding-inline: 2rem;
     text-align: center;
   }
 
   .eyebrow {
-    margin-block-end: 1.4rem;
+    position: static;
+    margin-block-end: 0.9rem;
+    transform: none;
   }
 
   .heading h2 {
-    font-size: clamp(4.6rem, 24vw, 7rem);
-    letter-spacing: -0.065em;
-    line-height: 0.78;
+    font-size: clamp(3rem, 7vw, 4.5rem);
   }
 
   .layout {
     display: flex;
     flex-direction: column;
-    gap: clamp(3rem, 11vw, 4.5rem);
-    margin-block-start: clamp(4rem, 14vw, 6rem);
+    gap: 3rem;
+    margin-block-start: 3rem;
+    padding-inline: 2rem;
+    transform: none;
   }
 
   .portrait {
     order: -1;
-    inline-size: min(72vw, 20rem);
+    inline-size: 40vw;
     align-self: center;
   }
 
+  .portraitField {
+    block-size: 30svh;
+  }
+
   .portraitSignature {
-    --signature-size: clamp(8rem, 35vw, 11rem);
-    right: -16%;
+    --signature-size: clamp(6rem, 22vw, 9rem);
+    left: -12%;
   }
 
   .copy {
-    gap: 1.5rem;
+    align-items: center;
+    margin-block-start: 0;
     text-align: center;
   }
 
-  .lead {
-    font-size: clamp(1.05rem, 4.7vw, 1.3rem);
-    line-height: 1.5;
-  }
-
-  .note {
-    margin-inline: auto;
-    font-size: 0.9rem;
-  }
-
+  .note,
   .cta {
     margin-inline: auto;
+  }
+}
+
+@media (max-width: 500px) {
+  .section {
+    padding-block-start: 3.5rem;
+  }
+
+  .heading h2 {
+    font-size: 3rem;
+  }
+
+  .layout {
+    margin-block-start: 2.5rem;
+    padding-inline: 1rem;
+  }
+
+  .portrait {
+    inline-size: 48vw;
+  }
+
+  .lead {
+    font-size: 1rem;
   }
 }
 

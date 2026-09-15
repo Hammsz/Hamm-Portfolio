@@ -26,7 +26,7 @@ const getCharacterOffset = (
   if (sceneIndex === 0) {
     return {
       x: direction * (30 + (characterIndex % 4) * 12) * travelScale,
-      y: ((characterIndex % 3) - 1) * 86 * travelScale,
+      y: (characterIndex % 2 === 0 ? -150 : 150) * travelScale,
       rotation: direction * (4 + (characterIndex % 3) * 2) * travelScale,
       scale: tablet ? 0.9 : 0.84,
     };
@@ -35,7 +35,7 @@ const getCharacterOffset = (
   if (sceneIndex === 1) {
     return {
       x: ((characterIndex % 5) - 2) * 34 * travelScale,
-      y: (characterIndex % 2 === 0 ? -96 : 112) * travelScale,
+      y: (characterIndex % 2 === 0 ? -150 : 150) * travelScale,
       rotation: direction * 7 * travelScale,
       scale: tablet ? 0.91 : 0.85,
     };
@@ -43,7 +43,7 @@ const getCharacterOffset = (
 
   return {
     x: direction * (36 + (characterIndex % 3) * 16) * travelScale,
-    y: (104 + (characterIndex % 3) * 20) * travelScale,
+    y: (characterIndex % 2 === 0 ? -150 : 150) * travelScale,
     rotation: direction * (5 + (characterIndex % 2) * 2) * travelScale,
     scale: tablet ? 0.9 : 0.82,
   };
@@ -226,9 +226,9 @@ export default function StatementMotion({ children, className }: StatementMotion
                     scrollTrigger: {
                       id: `statement-scene-${sceneIndex + 1}`,
                       trigger: scene,
-                      start: tablet ? "top 72%" : "top 68%",
-                      end: tablet ? "center 52%" : "center 50%",
-                      scrub: tablet ? 0.25 : 0.32,
+                      start: "top bottom",
+                      end: "top -25%",
+                      scrub: tablet ? 0.45 : 0.6,
                       invalidateOnRefresh: true,
                       onEnter: setWillChange,
                       onEnterBack: setWillChange,
@@ -245,10 +245,11 @@ export default function StatementMotion({ children, className }: StatementMotion
                   .fromTo(
                     heading,
                     {
+                      xPercent: sceneIndex === 1 ? -90 : 90,
                       scale: tablet ? 0.96 : 0.93,
                       transformOrigin: "50% 60%",
                     },
-                    { scale: 1, duration: 0.9 },
+                    { xPercent: 0, scale: 1, duration: 0.9 },
                     0,
                   )
                   .fromTo(

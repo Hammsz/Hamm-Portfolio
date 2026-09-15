@@ -72,13 +72,19 @@ export default function ServicesMotion({ children, className, pinClassName }: Se
                 "[data-services-viewport]",
               );
               const track = section.querySelector<HTMLElement>("[data-services-track]");
+              const progress = section.querySelector<HTMLElement>(
+                "[data-services-progress]",
+              );
 
               if (!pin || !viewport || !track || !desktop || reduceMotion) return;
 
               section.dataset.servicesMotion = "active";
 
               const horizontalDistance = () =>
-                Math.max(0, track.scrollWidth - viewport.clientWidth);
+                Math.max(
+                  0,
+                  track.scrollWidth - viewport.clientWidth + window.innerWidth * 0.15,
+                );
 
               const horizontalTween = gsap.to(track, {
                 x: () => -horizontalDistance(),
@@ -93,6 +99,11 @@ export default function ServicesMotion({ children, className, pinClassName }: Se
                   scrub: 0.6,
                   anticipatePin: 1,
                   invalidateOnRefresh: true,
+                  onUpdate: (trigger) => {
+                    if (progress) {
+                      progress.style.transform = `scaleX(${trigger.progress})`;
+                    }
+                  },
                   onEnter: () => {
                     track.style.willChange = "transform";
                   },
@@ -112,6 +123,9 @@ export default function ServicesMotion({ children, className, pinClassName }: Se
                 horizontalTween.scrollTrigger?.kill();
                 horizontalTween.kill();
                 gsap.set(track, { clearProps: "transform,willChange" });
+                if (progress) {
+                  progress.style.transform = "";
+                }
                 delete section.dataset.servicesMotion;
               };
             },

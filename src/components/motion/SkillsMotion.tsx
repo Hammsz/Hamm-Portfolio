@@ -173,7 +173,6 @@ export default function SkillsMotion({ children, className }: SkillsMotionProps)
                 .from(
                   panels,
                   {
-                    opacity: 0,
                     y: mobile ? 24 : tablet ? 30 : 36,
                     scale: mobile ? 1 : tablet ? 0.985 : 0.975,
                     transformOrigin: "50% 100%",
@@ -185,7 +184,7 @@ export default function SkillsMotion({ children, className }: SkillsMotionProps)
                 .from(
                   skillItems,
                   {
-                    opacity: 0,
+                    opacity: 0.35,
                     y: mobile ? 12 : 16,
                     duration: mobile ? 0.4 : 0.48,
                     stagger: mobile ? 0.016 : 0.028,

@@ -101,7 +101,7 @@
   --social-rail-color: var(--purple);
   --social-rail-icon-color: var(--ink);
   --social-rail-icon-hover-color: var(--purple);
-  --social-rail-icon-size: clamp(1.22rem, 1.1vw, 1.35rem);
+  --social-rail-icon-size: clamp(1.48rem, 1.35vw, 1.62rem);
   --social-rail-target-size: 2.875rem;
   --social-rail-line-before-size: clamp(4.5rem, 10vh, 5.5rem);
   --social-rail-line-after-size: clamp(3.5rem, 8vh, 4.5rem);
@@ -178,7 +178,7 @@
   }
 
   .socialRail {
-    --social-rail-icon-size: clamp(1.2rem, 5vw, 1.32rem);
+    --social-rail-icon-size: clamp(1.38rem, 5.7vw, 1.5rem);
     --social-rail-target-size: 2.875rem;
     --social-rail-line-width: clamp(2.25rem, 10vw, 3rem);
     --social-rail-line-before-size: 1px;

@@ -7,8 +7,8 @@
 .panel {
   position: relative;
   display: grid;
-  min-block-size: 88vh;
-  min-block-size: 88svh;
+  min-block-size: 85vh;
+  min-block-size: 85svh;
   place-items: center;
   padding-inline: var(--viewport-edge);
   overflow: clip;
@@ -21,7 +21,7 @@
 
 .panel[data-tone="light"] {
   background: var(--paper);
-  color: var(--purple-deep);
+  color: var(--ink);
 }
 
 .sceneIndex {
@@ -36,11 +36,11 @@
 
 .panel h2 {
   margin: 0;
-  font-family: var(--type-display);
-  font-size: clamp(5rem, 13vw, 15rem);
-  font-weight: 700;
-  letter-spacing: -0.075em;
-  line-height: 0.78;
+  font-family: var(--type-support);
+  font-size: clamp(6rem, 10vw, 10rem);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1;
   text-align: center;
   white-space: nowrap;
 }
@@ -48,6 +48,8 @@
 .panel :global(.statement-text) {
   display: inline-flex;
   max-inline-size: 100%;
+  transform: scaleY(1.35);
+  transform-origin: 50% 50%;
 }
 
 .panel :global(.statement-char) {
@@ -55,29 +57,21 @@
 }
 
 @media (min-width: 768px) and (max-width: 1199px) {
-  .panel {
-    min-block-size: 76svh;
-  }
-
   .panel h2 {
-    font-size: clamp(5.4rem, 13vw, 9rem);
+    font-size: clamp(3rem, 7vw, 6.5rem);
   }
 }
 
 @media (max-width: 767px) {
-  .panel {
-    min-block-size: 64svh;
-  }
-
   .panel h2 {
-    font-size: clamp(3.4rem, 16vw, 5.4rem);
-    letter-spacing: -0.055em;
-    line-height: 0.84;
+    font-size: 3rem;
+    letter-spacing: 0;
+    line-height: 1;
   }
 }
 
 @media (max-width: 380px) {
   .panel h2 {
-    font-size: clamp(3rem, 15vw, 4rem);
+    font-size: 2.75rem;
   }
 }

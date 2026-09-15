@@ -232,6 +232,8 @@
 
 .signature[data-brand-asset] img {
   filter: brightness(0) saturate(100%) invert(22%) sepia(99%) saturate(5569%) hue-rotate(261deg) brightness(100%) contrast(101%);
+  transform: translateY(-0.75rem) scaleY(0.78);
+  transform-origin: 50% 50%;
 }
 
 .srOnly {

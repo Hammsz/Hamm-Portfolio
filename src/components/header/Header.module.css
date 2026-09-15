@@ -101,6 +101,7 @@
 
 .signatureLink :global(.header-signature) img {
   filter: none;
+  transform: translateY(-0.3rem);
 }
 
 .clock {
@@ -373,6 +374,10 @@
 
   .signatureLink :global(.header-signature) {
     --signature-size: clamp(4.25rem, 18vw, 4.8rem);
+  }
+
+  .signatureLink :global(.header-signature) img {
+    transform: translateY(-0.24rem);
   }
 
   .clock {
