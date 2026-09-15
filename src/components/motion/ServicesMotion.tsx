@@ -5,10 +5,9 @@ import { type ReactNode, useEffect, useRef } from "react";
 type ServicesMotionProps = {
   children: ReactNode;
   className?: string;
-  pinClassName?: string;
 };
 
-export default function ServicesMotion({ children, className, pinClassName }: ServicesMotionProps) {
+export default function ServicesMotion({ children, className }: ServicesMotionProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -67,23 +66,70 @@ export default function ServicesMotion({ children, className, pinClassName }: Se
                 reduceMotion: boolean;
               };
 
-              const pin = section.querySelector<HTMLElement>("[data-services-pin]");
-              const viewport = section.querySelector<HTMLElement>(
-                "[data-services-viewport]",
+              const intro = section.querySelector<HTMLElement>(
+                "[data-services-intro]",
               );
+              const pin = section.querySelector<HTMLElement>("[data-services-pin]");
               const track = section.querySelector<HTMLElement>("[data-services-track]");
               const progress = section.querySelector<HTMLElement>(
                 "[data-services-progress]",
               );
 
-              if (!pin || !viewport || !track || !desktop || reduceMotion) return;
+              if (!intro || !pin || !track) return;
+
+              if (reduceMotion) {
+                section.style.backgroundColor = "#17151a";
+                section.style.color = "#f5f5f5";
+
+                return () => {
+                  section.style.backgroundColor = "";
+                  section.style.color = "";
+                };
+              }
 
               section.dataset.servicesMotion = "active";
+
+              const introTween = gsap.to(section, {
+                "--services-intro-opacity": 1,
+                ease: "none",
+                scrollTrigger: {
+                  id: "services-intro",
+                  trigger: section,
+                  start: "top 80%",
+                  end: "top 20%",
+                  scrub: true,
+                },
+              });
+
+              const themeTween = gsap.to(section, {
+                backgroundColor: "#17151a",
+                color: "#f5f5f5",
+                duration: 0.8,
+                ease: "power2.inOut",
+                scrollTrigger: {
+                  id: "services-theme",
+                  trigger: section,
+                  start: "top 20%",
+                  toggleActions: "play none none reverse",
+                },
+              });
+
+              if (!desktop) {
+                return () => {
+                  introTween.scrollTrigger?.kill();
+                  introTween.kill();
+                  themeTween.scrollTrigger?.kill();
+                  themeTween.kill();
+                  section.style.removeProperty("--services-intro-opacity");
+                  gsap.set(section, { clearProps: "backgroundColor,color" });
+                  delete section.dataset.servicesMotion;
+                };
+              }
 
               const horizontalDistance = () =>
                 Math.max(
                   0,
-                  track.scrollWidth - viewport.clientWidth + window.innerWidth * 0.15,
+                  track.scrollWidth - window.innerWidth + window.innerWidth * 0.15,
                 );
 
               const horizontalTween = gsap.to(track, {
@@ -92,16 +138,16 @@ export default function ServicesMotion({ children, className, pinClassName }: Se
                 scrollTrigger: {
                   id: "services-horizontal",
                   trigger: pin,
-                  start: "top top",
+                  start: "top 20%",
                   end: () => `+=${horizontalDistance()}`,
                   pin: true,
                   pinSpacing: true,
-                  scrub: 0.6,
+                  scrub: true,
                   anticipatePin: 1,
                   invalidateOnRefresh: true,
                   onUpdate: (trigger) => {
                     if (progress) {
-                      progress.style.transform = `scaleX(${trigger.progress})`;
+                      progress.style.width = `${trigger.progress * 100}%`;
                     }
                   },
                   onEnter: () => {
@@ -120,11 +166,17 @@ export default function ServicesMotion({ children, className, pinClassName }: Se
               });
 
               return () => {
+                introTween.scrollTrigger?.kill();
+                introTween.kill();
+                themeTween.scrollTrigger?.kill();
+                themeTween.kill();
                 horizontalTween.scrollTrigger?.kill();
                 horizontalTween.kill();
+                section.style.removeProperty("--services-intro-opacity");
+                gsap.set(section, { clearProps: "backgroundColor,color" });
                 gsap.set(track, { clearProps: "transform,willChange" });
                 if (progress) {
-                  progress.style.transform = "";
+                  progress.style.width = "";
                 }
                 delete section.dataset.servicesMotion;
               };
@@ -179,9 +231,7 @@ export default function ServicesMotion({ children, className, pinClassName }: Se
       className={className}
       aria-labelledby="services-heading"
     >
-      <div className={pinClassName} data-services-pin>
-        {children}
-      </div>
+      {children}
     </section>
   );
 }

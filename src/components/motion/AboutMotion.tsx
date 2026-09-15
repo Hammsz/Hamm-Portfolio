@@ -77,22 +77,14 @@ export default function AboutMotion({ children, className }: AboutMotionProps) {
               const layout = section.querySelector<HTMLElement>('[data-about="layout"]');
               const portrait = section.querySelector<HTMLElement>('[data-about="portrait"]');
               const body = section.querySelector<HTMLElement>('[data-about="body"]');
-              const detail = section.querySelector<HTMLElement>('[data-about="detail"]');
               const cta = section.querySelector<HTMLElement>('[data-about="cta"]');
 
-              if (
-                !headingParts.length ||
-                !layout ||
-                !portrait ||
-                !body ||
-                !detail ||
-                !cta
-              ) {
+              if (!headingParts.length || !layout || !portrait || !body || !cta) {
                 return;
               }
 
               const primaryTargets = [...headingParts, portrait];
-              const copyTargets = [body, detail, cta];
+              const copyTargets = [body, cta];
               const clearPrimaryStyles = () => {
                 gsap.set(primaryTargets, {
                   clearProps: "opacity,transform,willChange",
@@ -192,22 +184,13 @@ export default function AboutMotion({ children, className }: AboutMotionProps) {
                     0,
                   )
                   .from(
-                    detail,
-                    {
-                      opacity: 0,
-                      y: mobile ? 18 : 24,
-                      duration: mobile ? 0.58 : 0.65,
-                    },
-                    0.18,
-                  )
-                  .from(
                     cta,
                     {
                       opacity: 0,
                       y: mobile ? 14 : 18,
                       duration: mobile ? 0.5 : 0.55,
                     },
-                    0.32,
+                    0.22,
                   );
               }
 

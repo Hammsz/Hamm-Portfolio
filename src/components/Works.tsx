@@ -7,14 +7,10 @@ import styles from "./Works.module.css";
 export default function Works() {
   return (
     <WorksMotion className={styles.section}>
+      <div className={styles.heading} data-works="heading">
+        <h2 id="works-heading">WORKS</h2>
+      </div>
       <div className={styles.inner}>
-        <div className={styles.heading} data-works="heading">
-          <p className={styles.eyebrow}>03 / Selected work</p>
-          <h2 id="works-heading">Project stories need room to breathe.</h2>
-          <p className={styles.headingCopy}>
-            These are intentionally marked as draft placeholders. Replace them with verified Muhammad Ilham projects before publishing.
-          </p>
-        </div>
         <div className={styles.list}>
           {portfolioData.projects.map((project, index) => (
             <article className={styles.project} data-works-project key={project.title}>

@@ -4,7 +4,6 @@
   min-block-size: 100svh;
   margin-block-start: 40vh;
   margin-block-start: 40svh;
-  padding-block-end: clamp(7rem, 10vw, 10rem);
   background: var(--paper);
   color: var(--ink);
   overflow: clip;
@@ -12,102 +11,104 @@
 
 .inner {
   inline-size: 100%;
-  margin-inline: auto;
-}
-
-.heading {
-  position: relative;
-  padding-inline: clamp(2rem, 8.9vw, 8rem);
-}
-
-.eyebrow {
-  position: absolute;
-  top: 50%;
-  left: clamp(2rem, 8.9vw, 8rem);
-  margin: 0;
-  color: var(--purple-deep);
-  font-size: clamp(0.68rem, 0.65vw, 0.78rem);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  transform: translateY(-50%);
 }
 
 .heading h2 {
-  margin: 0;
+  margin: 0 0 1.3rem;
   font-family: var(--type-display);
   font-size: clamp(3rem, 5vw, 8rem);
   font-weight: 700;
-  letter-spacing: -0.055em;
-  line-height: 0.84;
+  letter-spacing: normal;
+  line-height: normal;
   text-align: center;
   text-transform: uppercase;
 }
 
 .layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 22vw;
-  gap: clamp(3rem, 5vw, 6rem);
-  align-items: start;
-  margin-block-start: 1.3rem;
-  padding-inline: clamp(2rem, 8.9vw, 8rem);
-  transform: translateY(-2.5rem);
+  position: relative;
+  z-index: 2;
+  display: flex;
+  inline-size: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-block-end: 3rem;
+  padding-inline: 8rem;
 }
 
 .copy {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
   max-inline-size: 50rem;
-  margin-block-start: 2.5rem;
 }
 
-.lead,
-.note {
+.body {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.body p {
   margin: 0;
-}
-
-.lead {
-  font-size: clamp(1rem, 1.45vw, 1.3rem);
-  letter-spacing: -0.015em;
-  line-height: 1.5;
-}
-
-.note {
-  max-inline-size: 36rem;
-  padding-block-start: 1rem;
-  border-block-start: 1px solid rgb(91 33 182 / 0.3);
-  color: var(--muted);
-  font-size: clamp(0.88rem, 0.92vw, 1.02rem);
-  line-height: 1.55;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  letter-spacing: normal;
+  line-height: normal;
 }
 
 .cta {
-  display: flex;
-  inline-size: min(100%, 19rem);
-  min-block-size: 3.5rem;
-  align-items: center;
-  justify-content: space-between;
-  border-block-end: 1px solid var(--ink);
-  color: var(--ink);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  position: relative;
+  display: grid;
+  inline-size: clamp(5.625rem, 25vw, 8.125rem);
+  block-size: 2.8125rem;
+  place-items: center;
+  overflow: hidden;
+  border: 0;
+  border-radius: 1em;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--type-support);
+  font-size: clamp(0.6rem, 3.5vw, 0.88rem);
+  font-weight: 400;
+  line-height: 1;
   text-decoration: none;
   text-transform: uppercase;
-  transition: color 180ms ease, border-color 180ms ease;
+  transition: color 250ms linear, transform 400ms ease;
+}
+
+.cta::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--purple);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 600ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.cta span {
+  position: relative;
+  z-index: 1;
 }
 
 .cta:hover,
 .cta:focus-visible {
-  border-color: var(--purple);
-  color: var(--purple-deep);
+  color: var(--ink);
+  transform: scale(1.05);
+}
+
+.cta:hover::before,
+.cta:focus-visible::before {
+  transform: scaleX(1);
 }
 
 .portrait {
   position: relative;
   inline-size: 22vw;
+  block-size: 55vh;
+  block-size: 55svh;
+  flex: 0 0 22vw;
   margin: 0;
-  justify-self: end;
 }
 
 .portraitField {
@@ -121,79 +122,29 @@
   overflow: hidden;
 }
 
-.portraitField::before,
-.portraitField::after,
-.portraitGrid {
-  position: absolute;
-  content: "";
-  pointer-events: none;
-}
-
-.portraitField::before {
-  inset: 7%;
-  border: 1px solid rgb(247 245 240 / 0.25);
-}
-
-.portraitField::after {
-  inset: 50% 0 auto;
-  border-block-start: 1px solid rgb(123 47 247 / 0.72);
-}
-
-.portraitGrid {
-  inset: 0 50% 0 auto;
-  border-inline-start: 1px solid rgb(123 47 247 / 0.72);
-}
-
-.portraitIndex {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  color: rgb(247 245 240 / 0.62);
-  font-size: 0.65rem;
-  letter-spacing: 0.14em;
-}
-
 .portraitMark {
   --brand-mark-size: 82%;
   opacity: 0.96;
 }
 
 .portraitSignature {
-  --signature-size: clamp(8rem, 11vw, 12rem);
+  --signature-size: 56%;
   position: absolute;
-  z-index: 2;
-  top: 0.8rem;
-  left: -8%;
-  transform: rotate(-12deg);
+  z-index: 3;
+  top: 0.4rem;
+  left: 0;
+  transform: rotate(-15deg);
 }
 
-.portrait figcaption {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-block-start: 0.75rem;
-  color: var(--muted);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.portraitSignature[data-brand-asset] img {
+  filter: brightness(0) saturate(100%) invert(31%) sepia(94%) saturate(4223%)
+    hue-rotate(252deg) brightness(96%) contrast(101%);
 }
 
 @media (max-width: 1000px) {
   .section {
     min-block-size: auto;
     margin-block-start: 0;
-    padding-block: clamp(4rem, 12vw, 7rem) clamp(6rem, 18vw, 8rem);
-  }
-
-  .heading {
-    padding-inline: 2rem;
-    text-align: center;
-  }
-
-  .eyebrow {
-    position: static;
-    margin-block-end: 0.9rem;
-    transform: none;
   }
 
   .heading h2 {
@@ -201,18 +152,16 @@
   }
 
   .layout {
-    display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: 3rem;
-    margin-block-start: 3rem;
     padding-inline: 2rem;
-    transform: none;
   }
 
   .portrait {
-    order: -1;
     inline-size: 40vw;
-    align-self: center;
+    block-size: 30vh;
+    block-size: 30svh;
+    flex-basis: auto;
   }
 
   .portraitField {
@@ -220,17 +169,14 @@
   }
 
   .portraitSignature {
-    --signature-size: clamp(6rem, 22vw, 9rem);
-    left: -12%;
+    --signature-size: 56%;
   }
 
   .copy {
     align-items: center;
-    margin-block-start: 0;
     text-align: center;
   }
 
-  .note,
   .cta {
     margin-inline: auto;
   }
@@ -238,29 +184,23 @@
 
 @media (max-width: 500px) {
   .section {
-    padding-block-start: 3.5rem;
-  }
-
-  .heading h2 {
-    font-size: 3rem;
-  }
-
-  .layout {
-    margin-block-start: 2.5rem;
-    padding-inline: 1rem;
+    min-block-size: 100svh;
   }
 
   .portrait {
     inline-size: 48vw;
   }
 
-  .lead {
-    font-size: 1rem;
+  .portraitSignature {
+    --signature-size: 68.5%;
+    top: 0.2rem;
+    left: -1.45rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cta {
+  .cta,
+  .cta::before {
     transition: none;
   }
 }

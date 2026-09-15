@@ -16,7 +16,6 @@ export default function SkillsMotion({ children, className }: SkillsMotionProps)
 
     const root = document.documentElement;
     let disposed = false;
-    let entrancePlayed = false;
     let setupPending = false;
     let setupRequested = false;
     let setupVersion = 0;
@@ -43,7 +42,10 @@ export default function SkillsMotion({ children, className }: SkillsMotionProps)
       const currentSetupVersion = setupVersion;
 
       try {
-        const { gsap } = await import("gsap");
+        const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+          import("gsap"),
+          import("gsap/ScrollTrigger"),
+        ]);
 
         if (
           disposed ||
@@ -53,150 +55,210 @@ export default function SkillsMotion({ children, className }: SkillsMotionProps)
           return;
         }
 
+        gsap.registerPlugin(ScrollTrigger);
+
         animationContext = gsap.context(() => {
           responsiveContext = gsap.matchMedia();
           responsiveContext.add(
             {
-              mobile: "(max-width: 767px)",
-              tablet: "(min-width: 768px) and (max-width: 1068px)",
-              desktop: "(min-width: 1069px)",
+              allViewports: "(min-width: 0px)",
               reduceMotion: "(prefers-reduced-motion: reduce)",
             },
             (mediaContext) => {
-              const { mobile, tablet, desktop, reduceMotion } = mediaContext.conditions as {
-                mobile: boolean;
-                tablet: boolean;
-                desktop: boolean;
+              const { reduceMotion } = mediaContext.conditions as {
                 reduceMotion: boolean;
               };
-
-              if (reduceMotion) return;
-
-              const introParts = section.querySelectorAll<HTMLElement>(
-                '[data-skills="intro"] > *',
+              const categories = Array.from(
+                section.querySelectorAll<HTMLElement>("[data-skills-category]"),
               );
-              const categoryControls = section.querySelectorAll<HTMLElement>(
-                "[data-skills-tab]",
-              );
-              const panels = section.querySelectorAll<HTMLElement>(
-                "[data-skills-panel]",
-              );
-              const skillItems = section.querySelectorAll<HTMLElement>(
-                "[data-skills-item]",
+              const tags = Array.from(
+                section.querySelectorAll<HTMLElement>("[data-skills-item]"),
               );
 
-              if (
-                !introParts.length ||
-                !categoryControls.length ||
-                !panels.length ||
-                !skillItems.length
-              ) {
-                return;
-              }
+              if (!categories.length || !tags.length) return;
 
-              const targets = [
-                ...introParts,
-                ...categoryControls,
-                ...panels,
-                ...skillItems,
-              ];
-              const pin = section.querySelector<HTMLElement>("[data-skills-pin]");
-              let activeProgressIndex = 0;
-              const progressionTween = desktop && pin
-                ? gsap.to({}, {
-                    scrollTrigger: {
-                      id: "skills-category-progression",
-                      trigger: pin,
-                      start: "top top",
-                      end: () => `+=${Math.max(window.innerHeight * 1.45, categoryControls.length * window.innerHeight * 0.52)}`,
-                      pin: true,
-                      pinSpacing: true,
-                      scrub: 0.35,
-                      anticipatePin: 1,
-                      invalidateOnRefresh: true,
-                      onUpdate: (trigger) => {
-                        const nextIndex = Math.min(
-                          categoryControls.length - 1,
-                          Math.floor(trigger.progress * categoryControls.length),
-                        );
-                        if (nextIndex === activeProgressIndex) return;
-                        activeProgressIndex = nextIndex;
-                        (categoryControls[nextIndex] as HTMLButtonElement).click();
-                      },
-                    },
-                  })
-                : undefined;
-              const clearEntranceStyles = () => {
-                gsap.set(targets, {
-                  clearProps: "opacity,transform,transformOrigin,willChange",
+              const categoryNames = categories.map(
+                (category) => category.dataset.category?.toLowerCase() ?? "",
+              );
+              const initialCategory = categoryNames[0];
+              const labels = tags
+                .map((tag) => tag.querySelector<HTMLElement>("span"))
+                .filter((label): label is HTMLElement => Boolean(label));
+              const inactiveBorder = "rgba(123, 47, 247, 0.6)";
+              const activeBorder = "rgb(123, 47, 247)";
+              let activeCategory = initialCategory;
+              let activeIndex = -1;
+
+              const setActiveState = (activeCategory: string) => {
+                categories.forEach((category) => {
+                  const isActive = category.dataset.category === activeCategory;
+                  category.dataset.active = String(isActive);
+                  if (isActive) category.setAttribute("aria-current", "true");
+                  else category.removeAttribute("aria-current");
+                });
+
+                tags.forEach((tag) => {
+                  tag.dataset.active = String(tag.dataset.category === activeCategory);
                 });
               };
 
-              if (entrancePlayed || section.getBoundingClientRect().top < 0) {
-                entrancePlayed = true;
-                clearEntranceStyles();
+              if (reduceMotion) {
+                setActiveState(initialCategory);
                 return;
               }
 
-              const entranceTimeline = gsap
-                .timeline({
-                  defaults: { ease: "power3.out" },
-                  scrollTrigger: {
-                    id: "skills-entrance",
-                    trigger: section,
-                    start: mobile ? "top 86%" : tablet ? "top 81%" : "top 77%",
-                    toggleActions: "play none none none",
-                    once: true,
-                  },
-                  onStart: () => {
-                    entrancePlayed = true;
-                    gsap.set(targets, { willChange: "transform, opacity" });
-                  },
-                  onComplete: clearEntranceStyles,
-                })
-                .from(introParts, {
-                  opacity: 0,
-                  y: mobile ? 22 : tablet ? 30 : 38,
-                  duration: mobile ? 0.52 : 0.7,
-                  stagger: mobile ? 0.07 : 0.1,
-                })
-                .from(
-                  categoryControls,
-                  {
-                    opacity: 0,
-                    y: mobile ? 14 : 20,
-                    duration: mobile ? 0.44 : 0.56,
-                    stagger: mobile ? 0.055 : 0.08,
-                  },
-                  mobile ? 0.2 : 0.3,
-                )
-                .from(
-                  panels,
-                  {
-                    y: mobile ? 24 : tablet ? 30 : 36,
-                    scale: mobile ? 1 : tablet ? 0.985 : 0.975,
-                    transformOrigin: "50% 100%",
-                    duration: mobile ? 0.62 : 0.76,
-                    stagger: mobile ? 0.07 : 0.11,
-                  },
-                  mobile ? 0.38 : 0.5,
-                )
-                .from(
-                  skillItems,
-                  {
-                    opacity: 0.35,
-                    y: mobile ? 12 : 16,
-                    duration: mobile ? 0.4 : 0.48,
-                    stagger: mobile ? 0.016 : 0.028,
-                  },
-                  mobile ? 0.56 : 0.7,
+              const activateIndex = (nextIndex: number, animate = true) => {
+                const boundedIndex = Math.min(
+                  categoryNames.length - 1,
+                  Math.max(0, nextIndex),
                 );
 
+                if (boundedIndex === activeIndex) return;
+
+                activeIndex = boundedIndex;
+                activeCategory = categoryNames[boundedIndex];
+
+                const activeCategoryElement = categories[boundedIndex];
+                const activeTags = tags.filter(
+                  (tag) => tag.dataset.category === activeCategory,
+                );
+
+                gsap.killTweensOf([...categories, ...tags, ...labels]);
+                setActiveState(activeCategory);
+                gsap.set(categories, { opacity: 0.4 });
+                gsap.set(tags, {
+                  opacity: 0.4,
+                  borderColor: inactiveBorder,
+                  backgroundColor: "transparent",
+                  scale: 1,
+                });
+                gsap.set(labels, { y: 0 });
+
+                if (!animate) {
+                  gsap.set(activeCategoryElement, { opacity: 1 });
+                  gsap.set(activeTags, {
+                    opacity: 1,
+                    borderColor: activeBorder,
+                  });
+                  return;
+                }
+
+                gsap.to(activeCategoryElement, {
+                  opacity: 1,
+                  duration: 0.4,
+                  ease: "power2.out",
+                  overwrite: true,
+                });
+                gsap.to(activeTags, {
+                  opacity: 1,
+                  borderColor: activeBorder,
+                  duration: 0.4,
+                  ease: "power2.out",
+                  overwrite: true,
+                });
+              };
+
+              activateIndex(0, false);
+
+              const stepDuration = 0.55;
+              const progression = gsap.to(
+                {},
+                {
+                  duration: categoryNames.length * stepDuration,
+                  ease: "none",
+                  scrollTrigger: {
+                    id: "skills-category-progression",
+                    trigger: section,
+                    start: "top 8%",
+                    end: `+=${categoryNames.length * stepDuration * 100}%`,
+                    scrub: true,
+                    pin: true,
+                    invalidateOnRefresh: true,
+                    onUpdate: (trigger) => {
+                      const nextIndex = Math.min(
+                        categoryNames.length - 1,
+                        Math.floor(trigger.progress * categoryNames.length),
+                      );
+                      activateIndex(nextIndex);
+                    },
+                    onLeave: () => activateIndex(categoryNames.length - 1),
+                    onLeaveBack: () => activateIndex(0),
+                  },
+                },
+              );
+
+              const enterHandlers = new Map<HTMLElement, EventListener>();
+              const leaveHandlers = new Map<HTMLElement, EventListener>();
+
+              tags.forEach((tag) => {
+                const label = tag.querySelector<HTMLElement>("span");
+                const hoverTargets = label ? [tag, label] : [tag];
+
+                const handleEnter: EventListener = () => {
+                  const isActive = tag.dataset.category === activeCategory;
+                  gsap.killTweensOf(hoverTargets);
+                  gsap.to(tag, {
+                    scale: 1.08,
+                    opacity: isActive ? 1 : 0.4,
+                    borderColor: isActive ? activeBorder : inactiveBorder,
+                    backgroundColor: isActive
+                      ? "rgba(255, 255, 255, 0.05)"
+                      : "transparent",
+                    duration: 0.25,
+                    ease: "back.out(1.5)",
+                    overwrite: true,
+                  });
+                  if (label) {
+                    gsap.to(label, {
+                      y: -2,
+                      duration: 0.25,
+                      ease: "back.out(1.5)",
+                    });
+                  }
+                };
+
+                const handleLeave: EventListener = () => {
+                  const isActive = tag.dataset.category === activeCategory;
+                  gsap.killTweensOf(hoverTargets);
+                  gsap.to(tag, {
+                    scale: 1,
+                    opacity: isActive ? 1 : 0.4,
+                    borderColor: isActive ? activeBorder : inactiveBorder,
+                    backgroundColor: "transparent",
+                    duration: 0.25,
+                    ease: "power2.out",
+                    overwrite: true,
+                  });
+                  if (label) {
+                    gsap.to(label, {
+                      y: 0,
+                      duration: 0.25,
+                      ease: "power2.out",
+                    });
+                  }
+                };
+
+                tag.addEventListener("mouseenter", handleEnter);
+                tag.addEventListener("mouseleave", handleLeave);
+                enterHandlers.set(tag, handleEnter);
+                leaveHandlers.set(tag, handleLeave);
+              });
+
               return () => {
-                entranceTimeline.kill();
-                progressionTween?.scrollTrigger?.kill();
-                progressionTween?.kill();
-                clearEntranceStyles();
+                progression.scrollTrigger?.kill();
+                progression.kill();
+                gsap.killTweensOf([...categories, ...tags]);
+                gsap.set([...categories, ...tags], {
+                  clearProps: "opacity,transform,backgroundColor,borderColor",
+                });
+                gsap.set(labels, { clearProps: "transform" });
+                tags.forEach((tag) => {
+                  const enterHandler = enterHandlers.get(tag);
+                  const leaveHandler = leaveHandlers.get(tag);
+                  if (enterHandler) tag.removeEventListener("mouseenter", enterHandler);
+                  if (leaveHandler) tag.removeEventListener("mouseleave", leaveHandler);
+                });
+                setActiveState(initialCategory);
               };
             },
             section,
@@ -223,10 +285,6 @@ export default function SkillsMotion({ children, className }: SkillsMotionProps)
       if (root.dataset.motion === "ready") {
         void setupAnimation();
         return;
-      }
-
-      if (root.dataset.motion === "reduced" || root.dataset.motion === "native") {
-        entrancePlayed = true;
       }
 
       teardownAnimation();
