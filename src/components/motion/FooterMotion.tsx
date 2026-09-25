@@ -16,13 +16,25 @@ export default function FooterMotion({ children, className }: FooterMotionProps)
 
     const root = document.documentElement;
     let disposed = false;
+    let refreshFrame = 0;
+    let refreshTimer = 0;
     let context: gsap.Context | undefined;
+
+    const clearScheduledRefresh = () => {
+      window.clearTimeout(refreshTimer);
+      window.cancelAnimationFrame(refreshFrame);
+      refreshTimer = 0;
+      refreshFrame = 0;
+    };
 
     const setup = async () => {
       if (context || root.dataset.motion !== "ready") return;
 
       try {
-        const { gsap } = await import("gsap");
+        const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+          import("gsap"),
+          import("gsap/ScrollTrigger"),
+        ]);
         if (disposed || root.dataset.motion !== "ready") return;
 
         context = gsap.context(() => {
@@ -41,15 +53,23 @@ export default function FooterMotion({ children, className }: FooterMotionProps)
                 ease: "power2.out",
                 scrollTrigger: {
                   id: "footer-signature-reveal",
-                  trigger: footer,
-                  start: "top 10%",
-                  toggleActions: "play none none none",
+                  trigger: signature,
+                  start: "top 96%",
+                  invalidateOnRefresh: true,
+                  refreshPriority: -10,
                   once: true,
                 },
               },
             );
           }
         }, footer);
+
+        refreshTimer = window.setTimeout(() => {
+          refreshFrame = window.requestAnimationFrame(() => {
+            ScrollTrigger.sort();
+            ScrollTrigger.refresh();
+          });
+        }, 250);
       } catch (error) {
         console.error("Footer motion failed; static content remains available.", error);
       }
@@ -58,6 +78,7 @@ export default function FooterMotion({ children, className }: FooterMotionProps)
     const sync = () => {
       if (root.dataset.motion === "ready") void setup();
       else if (root.dataset.motion !== "loading") {
+        clearScheduledRefresh();
         context?.revert();
         context = undefined;
       }
@@ -70,6 +91,7 @@ export default function FooterMotion({ children, className }: FooterMotionProps)
     return () => {
       disposed = true;
       observer.disconnect();
+      clearScheduledRefresh();
       context?.revert();
     };
   }, []);

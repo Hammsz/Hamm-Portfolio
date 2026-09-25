@@ -159,7 +159,6 @@ export const portfolioData = {
     "Express.js",
     "Jest",
   ],
-  statements: ["You focus", "I handle", "It flows"],
 };
 
 export type PortfolioData = typeof portfolioData;

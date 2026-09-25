@@ -228,7 +228,10 @@ export default function HeaderInteractions({
             (element.tagName === "SECTION" || element.tagName === "FOOTER"),
         );
 
-      if (!surface) return;
+      if (!surface) {
+        header.dataset.surface = root.dataset.pageTheme === "dark" ? "dark" : "light";
+        return;
+      }
 
       const surfaceBackground = getComputedStyle(surface).backgroundColor;
       const surfaceChannels = surfaceBackground.match(/[\d.]+/g);
@@ -269,12 +272,12 @@ export default function HeaderInteractions({
     syncSurfaceTone();
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll);
-    window.addEventListener("page-theme-change", syncSurfaceTone);
+    window.addEventListener("page-theme-change", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
-      window.removeEventListener("page-theme-change", syncSurfaceTone);
+      window.removeEventListener("page-theme-change", handleScroll);
       window.cancelAnimationFrame(frame);
     };
   }, [isMenuMounted]);

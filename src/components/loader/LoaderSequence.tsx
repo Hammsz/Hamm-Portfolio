@@ -15,17 +15,15 @@ export default function LoaderSequence({ signature }: LoaderSequenceProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const blocksRef = useRef<Array<HTMLSpanElement | null>>([]);
   const counterRef = useRef<HTMLDivElement>(null);
-  const progressBarRef = useRef<HTMLSpanElement>(null);
   const signatureRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = document.documentElement;
     const overlay = overlayRef.current;
     const counter = counterRef.current;
-    const progressBar = progressBarRef.current;
     const signatureElement = signatureRef.current;
 
-    if (!overlay || !counter || !progressBar || !signatureElement) return;
+    if (!overlay || !counter || !signatureElement) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let disposed = false;
@@ -37,7 +35,6 @@ export default function LoaderSequence({ signature }: LoaderSequenceProps) {
     const writeProgress = (value: number) => {
       const progress = Math.min(100, Math.max(0, Math.floor(value)));
       counter.textContent = `${String(progress).padStart(2, "0")}%`;
-      progressBar.style.width = `${progress}%`;
       overlay.setAttribute("aria-valuenow", String(progress));
     };
 
@@ -78,7 +75,7 @@ export default function LoaderSequence({ signature }: LoaderSequenceProps) {
           root.dataset.loader = "handoff";
           overlay.dataset.phase = "handoff";
           exitTween = gsap.to(overlay, {
-            yPercent: -100,
+            yPercent: 100,
             duration: 1,
             ease: "power4.inOut",
             onComplete: () => finish(),
@@ -169,10 +166,6 @@ export default function LoaderSequence({ signature }: LoaderSequenceProps) {
         </div>
         <div className={styles.counter} ref={counterRef} translate="no">
           00%
-        </div>
-        <p className={styles.loadingText}>Loading Experience</p>
-        <div className={styles.progressTrack} aria-hidden="true">
-          <span className={styles.progressBar} ref={progressBarRef} />
         </div>
       </div>
     </div>
