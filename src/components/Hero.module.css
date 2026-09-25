@@ -4,8 +4,9 @@
   --hero-wordmark-tracking: -0.055em;
   --hero-copy-offset: clamp(7.25rem, 8.8vw, 10.25rem);
   position: relative;
-  min-block-size: max(42rem, 100vh);
-  min-block-size: max(42rem, 100svh);
+  block-size: 100vh;
+  block-size: 100svh;
+  min-block-size: 0;
   padding-block-start: var(--header-block-size);
   background: var(--paper);
   color: var(--ink);
@@ -15,7 +16,9 @@
 
 .shell {
   position: relative;
-  min-block-size: calc(max(42rem, 100svh) - var(--header-block-size));
+  block-size: calc(100vh - var(--header-block-size));
+  block-size: calc(100svh - var(--header-block-size));
+  min-block-size: 0;
   inline-size: 100%;
 }
 
@@ -135,11 +138,6 @@
     --hero-social-bottom: clamp(6.85rem, 13.6svh, 8rem);
     --hero-wordmark-size: clamp(5.25rem, 25vw, 7rem);
     --hero-wordmark-tracking: -0.045em;
-    min-block-size: max(42rem, 100svh);
-  }
-
-  .shell {
-    min-block-size: calc(max(42rem, 100svh) - var(--header-block-size));
   }
 
   .markAnchor {

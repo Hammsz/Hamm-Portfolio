@@ -22,8 +22,10 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
     if (!section) return;
 
     const root = document.documentElement;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const shouldPlayEntrance = !reduceMotion && window.scrollY <= 8;
     let disposed = false;
-    let entrancePlayed = root.dataset.heroMotionFallback === "visible";
+    let entrancePlayed = !shouldPlayEntrance;
     let setupPending = false;
     let setupRequested = false;
     let setupVersion = 0;
@@ -32,9 +34,8 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
     let responsiveContext: gsap.MatchMedia | undefined;
     root.dataset.heroMotionMounted = "true";
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    section.dataset.heroTextState =
-      !reduceMotion && !entrancePlayed && window.scrollY <= 8 ? "pending" : "ready";
+    if (shouldPlayEntrance) delete root.dataset.heroMotionFallback;
+    section.dataset.heroTextState = shouldPlayEntrance ? "pending" : "ready";
 
     const loaderIsReady = () => {
       const loaderState = root.dataset.loader;
@@ -306,8 +307,6 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
     };
 
     const syncWithRuntime = () => {
-      if (root.dataset.heroMotionFallback === "visible") entrancePlayed = true;
-
       if (!loaderIsReady()) return;
 
       if (root.dataset.motion === "ready") {

@@ -20,7 +20,7 @@
   margin: 0 0 3rem;
   color: var(--ink);
   font-family: "Gambarino", Georgia, "Times New Roman", serif;
-  font-size: clamp(2.5rem, 5vw, 6rem);
+  font-size: clamp(2.5rem, min(5vw, 10.5svh), 6rem);
   font-style: italic;
   font-weight: 200;
   letter-spacing: normal;
@@ -94,6 +94,7 @@
 .contactRow {
   display: flex;
   inline-size: 100%;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: space-between;
   margin-block-end: 10rem;
@@ -206,7 +207,7 @@
 .wordmark {
   color: var(--ink);
   font-family: var(--type-display);
-  font-size: clamp(8rem, 25vw, 16rem);
+  font-size: clamp(6rem, 27.5vw, 25.2rem);
   font-weight: 700;
   letter-spacing: normal;
   line-height: 0.75;
@@ -224,6 +225,12 @@
   display: block;
   transform: translateX(-50%) rotate(-15deg);
   transform-origin: 50% 50%;
+}
+
+:global(html[data-motion="loading"]) .signatureAnchor,
+:global(html[data-motion="ready"]) .signatureAnchor {
+  clip-path: inset(0 100% 0 0);
+  opacity: 0;
 }
 
 .signature {
@@ -251,7 +258,6 @@
 
 @media (min-width: 1000px) {
   .wordmark {
-    font-size: 22rem;
     line-height: 0.72;
     transform: translateY(32%);
   }
@@ -300,7 +306,6 @@
   }
 
   .wordmark {
-    font-size: 8rem;
     transform: translateY(22%);
   }
 

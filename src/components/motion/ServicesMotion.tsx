@@ -137,15 +137,17 @@ export default function ServicesMotion({ children, className }: ServicesMotionPr
               if (!intro || !pin || !track) return;
 
               if (reduceMotion) {
-                section.style.setProperty("--services-intro-opacity", "1");
-                return () => section.style.removeProperty("--services-intro-opacity");
+                gsap.set(intro, { opacity: 1 });
+                return () => gsap.set(intro, { clearProps: "opacity" });
               }
 
               section.dataset.servicesMotion = "active";
+              gsap.set(intro, { opacity: 0, willChange: "opacity" });
 
-              const introTween = gsap.to(section, {
-                "--services-intro-opacity": 1,
+              const introTween = gsap.to(intro, {
+                opacity: 1,
                 ease: "none",
+                overwrite: "auto",
                 scrollTrigger: {
                   id: "services-intro",
                   trigger: section,
@@ -159,7 +161,7 @@ export default function ServicesMotion({ children, className }: ServicesMotionPr
                 return () => {
                   introTween.scrollTrigger?.kill();
                   introTween.kill();
-                  section.style.removeProperty("--services-intro-opacity");
+                  gsap.set(intro, { clearProps: "opacity,willChange" });
                   delete section.dataset.servicesMotion;
                 };
               }
@@ -208,7 +210,7 @@ export default function ServicesMotion({ children, className }: ServicesMotionPr
                 introTween.kill();
                 horizontalTween.scrollTrigger?.kill();
                 horizontalTween.kill();
-                section.style.removeProperty("--services-intro-opacity");
+                gsap.set(intro, { clearProps: "opacity,willChange" });
                 gsap.set(track, { clearProps: "transform,willChange" });
                 if (progress) {
                   progress.style.width = "";

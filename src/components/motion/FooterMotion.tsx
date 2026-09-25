@@ -1,6 +1,10 @@
 "use client";
 
 import { type ReactNode, useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type FooterMotionProps = {
   children: ReactNode;
@@ -27,14 +31,10 @@ export default function FooterMotion({ children, className }: FooterMotionProps)
       refreshFrame = 0;
     };
 
-    const setup = async () => {
+    const setup = () => {
       if (context || root.dataset.motion !== "ready") return;
 
       try {
-        const [{ gsap }, { ScrollTrigger }] = await Promise.all([
-          import("gsap"),
-          import("gsap/ScrollTrigger"),
-        ]);
         if (disposed || root.dataset.motion !== "ready") return;
 
         context = gsap.context(() => {
@@ -53,10 +53,10 @@ export default function FooterMotion({ children, className }: FooterMotionProps)
                 ease: "power2.out",
                 scrollTrigger: {
                   id: "footer-signature-reveal",
-                  trigger: signature,
-                  start: "top 96%",
+                  trigger: footer,
+                  start: "top 10%",
                   invalidateOnRefresh: true,
-                  refreshPriority: -10,
+                  refreshPriority: -100,
                   once: true,
                 },
               },
@@ -64,19 +64,27 @@ export default function FooterMotion({ children, className }: FooterMotionProps)
           }
         }, footer);
 
-        refreshTimer = window.setTimeout(() => {
-          refreshFrame = window.requestAnimationFrame(() => {
-            ScrollTrigger.sort();
-            ScrollTrigger.refresh();
-          });
-        }, 250);
+        void document.fonts.ready.then(() => {
+          if (disposed || !context) return;
+          refreshTimer = window.setTimeout(() => {
+            refreshFrame = window.requestAnimationFrame(() => {
+              ScrollTrigger.sort();
+              ScrollTrigger.refresh();
+            });
+          }, 350);
+        });
       } catch (error) {
+        const signature = footer.querySelector<HTMLElement>("[data-footer-signature]");
+        if (signature) {
+          signature.style.clipPath = "none";
+          signature.style.opacity = "1";
+        }
         console.error("Footer motion failed; static content remains available.", error);
       }
     };
 
     const sync = () => {
-      if (root.dataset.motion === "ready") void setup();
+      if (root.dataset.motion === "ready") setup();
       else if (root.dataset.motion !== "loading") {
         clearScheduledRefresh();
         context?.revert();

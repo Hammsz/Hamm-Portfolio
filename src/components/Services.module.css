@@ -3,7 +3,7 @@
   inline-size: 100%;
   background: transparent;
   color: inherit;
-  overflow: clip;
+  overflow: visible;
 }
 
 .inner {
@@ -22,11 +22,6 @@
   font-weight: 400;
   letter-spacing: normal;
   line-height: 1.5;
-  transition: opacity 300ms ease;
-}
-
-.section[data-services-motion="active"] .intro {
-  opacity: var(--services-intro-opacity, 0);
 }
 
 .pin {
@@ -68,7 +63,7 @@
   position: relative;
   display: flex;
   inline-size: 30rem;
-  block-size: 30rem;
+  block-size: clamp(26rem, 53.333svh, 30rem);
   flex: 0 0 30rem;
   flex-direction: column;
   justify-content: space-between;
