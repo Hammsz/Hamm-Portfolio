@@ -97,6 +97,7 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: space-between;
+  margin-block-start: calc(-1 * clamp(1.5rem, min(2.25vw, 4svh), 2.5rem));
   margin-block-end: 10rem;
   padding-inline: 3rem;
 }

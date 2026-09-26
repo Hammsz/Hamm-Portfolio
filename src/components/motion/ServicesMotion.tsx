@@ -142,7 +142,7 @@ export default function ServicesMotion({ children, className }: ServicesMotionPr
               }
 
               section.dataset.servicesMotion = "active";
-              gsap.set(intro, { opacity: 0, willChange: "opacity" });
+              gsap.set(intro, { opacity: 0 });
 
               const introTween = gsap.to(intro, {
                 opacity: 1,
@@ -161,7 +161,7 @@ export default function ServicesMotion({ children, className }: ServicesMotionPr
                 return () => {
                   introTween.scrollTrigger?.kill();
                   introTween.kill();
-                  gsap.set(intro, { clearProps: "opacity,willChange" });
+                  gsap.set(intro, { clearProps: "opacity" });
                   delete section.dataset.servicesMotion;
                 };
               }
@@ -210,7 +210,7 @@ export default function ServicesMotion({ children, className }: ServicesMotionPr
                 introTween.kill();
                 horizontalTween.scrollTrigger?.kill();
                 horizontalTween.kill();
-                gsap.set(intro, { clearProps: "opacity,willChange" });
+                gsap.set(intro, { clearProps: "opacity" });
                 gsap.set(track, { clearProps: "transform,willChange" });
                 if (progress) {
                   progress.style.width = "";
