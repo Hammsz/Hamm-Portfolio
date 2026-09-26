@@ -205,7 +205,6 @@ export default function HeaderInteractions({
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
-    const root = document.documentElement;
 
     if (isMenuMounted) {
       header.dataset.scrollHidden = "false";
@@ -214,39 +213,6 @@ export default function HeaderInteractions({
 
     let lastScrollY = window.scrollY;
     let frame = 0;
-
-    const syncSurfaceTone = () => {
-      const sampleY = Math.min(
-        Math.max(header.getBoundingClientRect().height / 2, 1),
-        window.innerHeight - 1,
-      );
-      const surface = document
-        .elementsFromPoint(window.innerWidth / 2, sampleY)
-        .find(
-          (element) =>
-            !element.closest("[data-site-header]") &&
-            (element.tagName === "SECTION" || element.tagName === "FOOTER"),
-        );
-
-      if (!surface) {
-        header.dataset.surface = root.dataset.pageTheme === "dark" ? "dark" : "light";
-        return;
-      }
-
-      const surfaceBackground = getComputedStyle(surface).backgroundColor;
-      const surfaceChannels = surfaceBackground.match(/[\d.]+/g);
-      const surfaceAlpha = surfaceChannels?.[3] === undefined ? 1 : Number(surfaceChannels[3]);
-      if (!surfaceChannels || surfaceAlpha <= 0.01) {
-        header.dataset.surface = root.dataset.pageTheme === "dark" ? "dark" : "light";
-        return;
-      }
-      const channels = surfaceBackground.match(/[\d.]+/g);
-      if (!channels || channels.length < 3) return;
-
-      const [red, green, blue] = channels.slice(0, 3).map(Number);
-      const luminance = red * 0.2126 + green * 0.7152 + blue * 0.0722;
-      header.dataset.surface = luminance < 128 ? "dark" : "light";
-    };
 
     const syncHeader = () => {
       frame = 0;
@@ -260,7 +226,6 @@ export default function HeaderInteractions({
       }
 
       lastScrollY = nextScrollY;
-      syncSurfaceTone();
     };
 
     const handleScroll = () => {
@@ -269,15 +234,12 @@ export default function HeaderInteractions({
     };
 
     header.dataset.scrollHidden = "false";
-    syncSurfaceTone();
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll);
-    window.addEventListener("page-theme-change", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
-      window.removeEventListener("page-theme-change", handleScroll);
       window.cancelAnimationFrame(frame);
     };
   }, [isMenuMounted]);

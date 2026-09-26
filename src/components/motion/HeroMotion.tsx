@@ -97,8 +97,8 @@ export default function HeroMotion({ children, className }: HeroMotionProps) {
           responsiveContext = gsap.matchMedia();
           responsiveContext.add(
             {
-              desktop: "(min-width: 768px)",
-              mobile: "(max-width: 767px)",
+              desktop: "(min-width: 1001px)",
+              mobile: "(max-width: 1000px)",
               reduceMotion: "(prefers-reduced-motion: reduce)",
             },
             (mediaContext) => {
